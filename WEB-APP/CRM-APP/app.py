@@ -15,6 +15,7 @@ app = Flask(__name__,template_folder="templates")
 app.debug = True
 app.register_blueprint(homePage,url_prefix= "/")
 app.register_blueprint(securityPages,url_prefix="/security")
+app.register_blueprint(profile,url_prefix="/cmo")
 
 bootstrap = Bootstrap(app)
 

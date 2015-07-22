@@ -9,6 +9,7 @@ from flask import Blueprint
 
 homePage = Blueprint("app",__name__)
 
-@homePage.route("/app")
+@homePage.route("")
+@homePage.route("index.html")
 def __homePage__():
     return "Hello"

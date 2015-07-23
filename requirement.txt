@@ -1,0 +1,3 @@
+flask-boostrap
+python-redis
+pymongo

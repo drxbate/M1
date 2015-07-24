@@ -25,6 +25,10 @@ class Test(unittest.TestCase):
     def readUserRegistion(self):
         rInfo = User.popRegistQueue()
         self.assertTrue(True, rInfo)
+    def getUserInfo(self):
+        userInfo = User.getUserInfo("test")
+        self.assertTrue(True, userInfo)
+
 if __name__ == "__main__":
-    import sys;sys.argv = ['', 'Test.readUserRegistion']
+    import sys;sys.argv = ['', 'Test.getUserInfo']
     unittest.main()

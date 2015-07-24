@@ -17,13 +17,14 @@ RedisCli=RedisHandler()
 class MongoHandler(object):
     def __init__(self):
         self.client=MongoClient("mongodb://root:root@140.206.217.95/user")
-
     def opendb(self,name):
         db = self.client.get_database(name)
         #db.authenticate("root","root")
         return db
-    def getUser(self):
+    @property
+    def User(self):
         return self.opendb("user")
+    
      
 
 MongoCli=MongoHandler()

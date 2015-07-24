@@ -19,5 +19,5 @@ def createUser():
         #{"username":username,"password":password,"info":info}
         objectId=User.createUser(rInfo["username"], rInfo["password"], rInfo["info"])
     except:
-        print sys.exc_info() 
+        print sys.exc_info()
     return True

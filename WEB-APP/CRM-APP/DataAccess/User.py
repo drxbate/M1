@@ -26,13 +26,15 @@ def popRegistQueue():
     return None if e==None else json.loads(e)
 
 def createUser(username,password,info=[]):
-    userDb = MongoCli.getUser()
-    return userDb["authinfo"].save({"username":username,"password":password,"info":info})
-
-def getUserId(username):
-    auth = MongoCli.User["authinfo"].find_one({"username":username})
-    return auth.objectid
+    return MongoCli.User["authinfo"].save({"username":username,"password":password,"info":info})
 
 def getPassword(username):
-    auth = MongoCli.User["authinfo"].find_one({"username":username})
-    return auth["passowrd"]
+    auth = MongoCli.User["authinfo"].find_one({"username":username},{"passowrd":1})
+    return None if auth == None else auth["passowrd"]
+
+def getUserInfo(username):
+    auth = MongoCli.User["authinfo"].find_one({"username":username},{"username":1})
+    return auth
+
+def existsUser(username):
+    return getPassword(username)!=None

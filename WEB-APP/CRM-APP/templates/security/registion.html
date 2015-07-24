@@ -1,0 +1,189 @@
+{% extends "bootstrap/base.html" %}
+{% block title %}C.M.O 注册新用户{% endblock %}
+{% block navbar %}
+<div class="navbar navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">CMO</a>
+        </div>
+         
+        
+    </div>
+</div>
+{% endblock %}
+ 
+{% block content %}
+<div class="container">
+	<div class="center-block">
+		<h1>注册新用户</h1>
+	</div>
+    <div style="max-width:1000px">
+    <div class="form-group col-sm-8">
+		  
+    	<form class="form-horizontal" method="post" enctype="multipart/form-data">
+		  
+		  <div class="form-group">
+		  	<label for="tvUsername" class="col-sm-3 control-label">邮箱</label>
+		  	<div class="col-sm-8">
+		    <input type="email" class="form-control form-valid" name="user" id="tvUsername" placeholder="邮箱" warn-control="divWarnEmail" valid-func="check_username" valid-event="blur" valid-required="true" valid-warn-func='warn_username'>
+		    </div>
+		  </div>
+		  <div id="divWarnEmail"  class="col-sm-8 col-sm-offset-3 hidden">
+			    <div class="alert alert-danger" role="alert" >
+			    
+			    </div>
+		  </div>
+		  <div class="form-group">
+		  	<label for="tvPassword" class="col-sm-3 control-label">密码</label>
+		  	<div class="col-sm-8">
+		    <input type="password" class="form-control form-valid" name="password" id="tvPassword" placeholder="密码" warn-control="divWarnPwd" valid-func="check_password" valid-event="blur" valid-required="true" valid-warn-func='warn_password'>
+		    </div>
+		    
+		  </div>
+		  <div id="divWarnPwd"  class="col-sm-8 col-sm-offset-3 hidden">
+			    <div class="alert alert-danger" role="alert" >
+			    
+			    </div>
+		  </div>
+		  <div class="form-group">
+		  	<label for="tvPasswordConfirm" class="col-sm-3 control-label">确认密码</label>
+		  	<div class="col-sm-8">
+		    <input type="password" class="form-control form-valid" name="passwordConfirm" id="tvPasswordConfirm" placeholder="确认密码" warn-control="divWarnPwdConfirm" valid-func="check_passwordconfirm" valid-event="blur" valid-required="true" valid-warn-func='warn_passwordconfirm'>
+		    </div>		    
+		  </div>
+		  <div id="divWarnPwdConfirm"  class="col-sm-8 col-sm-offset-3 hidden">
+			    <div class="alert alert-danger" role="alert" >
+			    
+			    </div>
+		  </div>
+		  <div class="form-group">
+		  <div  class="col-sm-offset-3 col-sm-8">
+		  <div class="checkbox">
+		    	<label>
+		    	<input type="checkbox" class="form-control-inline" name="confirm" id="chkAgree">
+			    	同意接受协议
+			    </label>		
+			    </div>
+			    </div>
+		  </div>
+		  
+		  <div class="form-group">
+		  <div class="col-sm-offset-3 col-sm-8">
+		  <button id="btnOk" type="button" class="btn btn-primary btn-lg" disabled="disabled">注册</button>
+		  </div>
+		  </div>
+		</form>
+    </div>
+    
+</div>
+
+{% endblock %}
+{%block scripts%}
+<script type="text/javascript" src="{{url_for('static', filename='js/comm.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='js/jquery.js')}}"></script>
+<script type="text/javascript">
+	function check_username(){
+		if(isEmail(this.value)){
+			res=true;
+			var obj=this;
+			var json = $.ajax({
+				type:"GET",
+				async:false,
+				url:"exists",
+				data:"user="+this.value,
+				dataType:"json",
+				success:function(data){
+					if(data.state==1){
+						$(obj).showMessage("该邮件已经注册...","warn");
+						res=false;
+					}
+					else{
+						$(obj).hideMessage("warn");
+					}
+				},
+			});
+			
+			return res;
+		}
+		else{
+			$(this).showMessage("请输入正确邮件格式:xx@xx.com","warn");
+			return false;
+		}
+	}
+	function warn_username(level,shown,message){
+		if(!shown){
+			$("#divWarnEmail").addClass("hidden");
+		}
+		else{
+			$("#divWarnEmail").removeClass("hidden").find(".alert").text(message);
+		}
+	}
+	
+	function check_password(){
+		if(this.value.length<=3){
+			$(this).showMessage("密码长度请勿少于3位","warn");
+			return false;
+		}
+		else{
+			$(this).hideMessage("warn");
+			return true;
+		}
+	}
+	function warn_password(level,shown,message){
+		if(shown){
+			$("#divWarnPwd").removeClass("hidden").find(".alert").text(message);
+		}
+		else{
+			$("#divWarnPwd").addClass("hidden")
+		}
+	}
+	
+	function check_passwordconfirm(){
+		var pwd=$("#tvPassword").val();
+		
+		if(this.value!=pwd){
+			$(this).showMessage("确认密码有误，请重新确认密码...","warn");
+			return false;
+		}
+		else{
+			$(this).hideMessage("warn");
+			return true;
+		}
+	}
+	function warn_passwordconfirm(level,shown,message){
+		if(shown){
+			$("#divWarnPwdConfirm").removeClass("hidden").find(".alert").text(message);
+		}
+		else{
+			$("#divWarnPwdConfirm").addClass("hidden")
+		}
+	}
+	
+	$(document).bind("ready",function(){
+		
+		$("#chkAgree").click(function(){
+			if(this.checked){
+				$("#btnOk")[0].disabled=false;
+			}
+			else{
+				$("#btnOk")[0].disabled=true;
+			}
+		});
+		
+		$("#btnOk").click(function(){
+			if($(".form-horizontal").validForm()){
+				$(".form-horizontal")[0].submit();
+			}
+		});
+	})
+	
+
+</script>
+<script type="text/javascript" src="{{url_for('static', filename='js/jquery.valid.js')}}"></script>
+{% endblock %}

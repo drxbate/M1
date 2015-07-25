@@ -9,14 +9,20 @@ from Handler import RedisCli
 import time,uuid
 
 def loadSession(ssid):
-    return RedisCli.hgetall("sessions:%s"%ssid)
+    return RedisCli.hgetall("sessions:data:%s"%ssid)
 
 def updateSession(ssid,dict={}):
-    RedisCli.expire("sessions:%s"%ssid, time+120*60)#2小时超时
+    RedisCli.expire("sessions:data:%s"%ssid, 120*60)#2小时超时
     for k,v in dict.items():
-        RedisCli.hset("sessions:%s"%ssid, k, v)
+        RedisCli.hset("sessions:data:%s"%ssid, k, v)
+
+def clearSession(ssid):
+    RedisCli.delete("sessions:data:%s"%ssid)#2小时超时
 
 def createSession(userid):
+    ssid = RedisCli.hget("sessions:users",userid)
+    if ssid==None or ssid=="":
+        clearSession(ssid)
     ssid=uuid.uuid1()
-    RedisCli.hset("user:sessions:%s"%userid, ssid)
+    RedisCli.hset("sessions:users",userid, ssid)
     return ssid

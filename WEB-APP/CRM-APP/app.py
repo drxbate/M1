@@ -12,6 +12,7 @@ from httpModules import *
 from flask.ext.bootstrap import Bootstrap
 
 app = Flask(__name__,template_folder="templates",static_folder="static")
+app.config['SECRET_KEY'] = '123456'
 app.debug = True
 app.register_blueprint(homePage,url_prefix= "/")
 app.register_blueprint(securityPages,url_prefix="/security")

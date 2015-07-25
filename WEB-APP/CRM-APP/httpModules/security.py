@@ -19,7 +19,7 @@ def showLoginForm():
 @securityPages.route("/login",methods=["POST"])
 def valid():
     user,pwd=request.form.get("user"),request.form.get("password")
-    return redirect("../cmo/{0}/index.html".format(user))
+    return redirect("../cmo/index.html")
 
 @securityPages.route("/registion",methods=["GET"])
 def registion():
@@ -28,8 +28,31 @@ def registion():
 @securityPages.route("/registion",methods=["POST"])
 def regist_user():
     user,pwd=request.form.get("user"),request.form.get("password")
-    security.User.createUser(user, pwd, {})
+    security.User.createUser(user, pwd, {}) 
+    return redirect("security/registion-confirm-form?user=%s"%user)
+
+@securityPages.route("/registion-confirm-form",methods=["GET"])
+def confirmCodeForm():
+    errors={"invalidcode":"无效编码，请重新获取"}
+    errcode = request.args.get("error")
     
+    user=request.args.get("user")
+    
+    errormessage="" if errcode==None or errcode=="" else "未知错误" if errors.has_key(errcode) else errors[errcode]
+    
+    return render_template("security/registion-confirm.html",error=errormessage,username=user)
+
+
+@securityPages.route("/registion-code-confirm",methods=["POST"])
+def confirmCode():
+    user,code=request.form.get("user"),request.form.get("code")
+    if security.Registion.validCode(user, code):
+        ss = security.Session.CreateSession(user)
+        session["ssid"]=ss.ssid
+        return redirect("../cmo/index.html")
+    else:
+        return redirect("security/registion-confirm-form?user=%s&error=invalidcode"%user)
+
 @securityPages.route("/exists",methods=["GET"])
 def exists_user():
     user=request.args.get("user")

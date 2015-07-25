@@ -1,0 +1,78 @@
+{% extends "bootstrap/base.html" %}
+{% block title %}C.M.O 等待验证码{% endblock %}
+{% block navbar %}
+<div class="navbar navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">CMO</a>
+        </div>
+         
+        
+    </div>
+</div>
+{% endblock %}
+ 
+{% block content %}
+<div class="container">
+	<div class="center-block">
+		<h1>等待获取验证码</h1>
+	</div>
+    <div style="max-width:1000px">
+    <div class="form-group col-sm-8">
+		  
+    	<form class="form-horizontal" method="post" enctype="multipart/form-data" action="registion-code-confirm">
+		  
+		  <div class="form-group">
+		  	<label for="tvUsername" class="col-sm-3 control-label">手机号码</label>
+		  	<div class="col-sm-8">
+		    <input type="text" class="form-control" name="user" id="tvUsername" value="{{ username }}" >
+		    </div>
+		  </div>
+		  <div class="form-group">
+		  	<label for="tvCode" class="col-sm-3 control-label">动态验证码（六位）</label>
+		  	<div class="col-sm-8">
+		    <input type="text" class="form-control" name="code" id="tvCode">
+		    </div>
+		  </div>
+		  <div class="form-group">
+		  <div class="col-sm-offset-3 col-sm-8">
+		  <button id="btnOk" type="button" class="btn btn-primary btn-lg" disabled="disabled">验证</button>
+		  </div>
+		  </div>
+		</form>
+    </div>
+    
+</div>
+
+{% endblock %}
+{%block scripts%}
+<script type="text/javascript" src="{{url_for('static', filename='js/comm.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='js/jquery.js')}}"></script>
+<script type="text/javascript">
+	
+	
+	$(document).bind("ready",function(){
+		
+		$("#tvCode").blur(function(){
+			if(this.value!=''){
+				$("#btnOk")[0].disabled=false;
+			}
+			else{
+				$("#btnOk")[0].disabled=true;
+			}
+		});
+		
+		$("#btnOk").click(function(){
+			$(".form-horizontal")[0].submit();
+		});
+	})
+	
+
+</script>
+{% endblock %}

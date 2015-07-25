@@ -14,5 +14,5 @@ sudo pip install uwsgi
         <processes>4</processes>
         <memory-report/>
         <pidfile>/tmp/cmo-http.pid</pidfile>
-        <daemonize>/var/M1/log/cmo-http.log</daemonize>
+        <daemonize>/var/log/M1/cmo-http.log</daemonize>
 </uwsgi>

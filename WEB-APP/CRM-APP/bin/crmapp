@@ -1,0 +1,42 @@
+#! /bin/sh
+
+HOME=/var/aYiAi
+
+cd $HOME
+
+case "$1" in
+start)
+python $HOME/StorageSpace-daemon.py start
+echo Waiting start StorageSpace-Service...
+sleep 3
+python $HOME/xmpp-daemon.py start
+
+uwsgi -x $HOME/bin/http-config.xml
+;;
+
+stop)
+python $HOME/StorageSpace-daemon.py stop
+python $HOME/xmpp-daemon.py stop
+
+uwsgi --stop /tmp/sinyi-aYi-http.pid
+;;
+
+restart)
+echo Stoping service
+python $HOME/xmpp-daemon.py stop
+uwsgi --stop /tmp/sinyi-aYi-http.pid
+python $HOME/StorageSpace-daemon.py stop
+
+sleep 3
+python $HOME/StorageSpace-daemon.py start
+echo Waiting start StorageSpace-Service...
+sleep 3
+python $HOME/xmpp-daemon.py start
+;;
+
+*)
+echo "Usage:$0{start|stop|status}"
+;;
+esac
+
+exit 0

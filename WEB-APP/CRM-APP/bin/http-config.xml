@@ -1,0 +1,18 @@
+<uwsgi>
+<!--
+How to install uwsgi:
+sudo pip install uwsgi 
+ -->
+        <!--plugins>python</plugins-->
+        <chdir>/var/aYiAi</chdir>
+        <pythonpath>/var/aYiAi</pythonpath>
+        <module>httpd</module>
+        <callable>app</callable>
+        <!--socket>127.0.0.1:9001</socket-->
+        <http>0.0.0.0:8000</http>
+        <master/>
+        <processes>4</processes>
+        <memory-report/>
+        <pidfile>/tmp/sinyi-aYi-http.pid</pidfile>
+        <daemonize>/var/aYiAi/log/uwsgi.log</daemonize>
+</uwsgi>

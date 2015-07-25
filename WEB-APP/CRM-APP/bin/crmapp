@@ -1,37 +1,28 @@
 #! /bin/sh
 
-HOME=/var/aYiAi
+HOME=/var/M1/WEB-APP/CRM-APP
 
 cd $HOME
 
 case "$1" in
 start)
-python $HOME/StorageSpace-daemon.py start
-echo Waiting start StorageSpace-Service...
-sleep 3
-python $HOME/xmpp-daemon.py start
-
+python $HOME/taskAgent.py start
 uwsgi -x $HOME/bin/http-config.xml
 ;;
 
 stop)
-python $HOME/StorageSpace-daemon.py stop
-python $HOME/xmpp-daemon.py stop
-
-uwsgi --stop /tmp/sinyi-aYi-http.pid
+python $HOME/taskAgent.py start
+uwsgi --stop /tmp/crm-http.pid
 ;;
 
 restart)
 echo Stoping service
-python $HOME/xmpp-daemon.py stop
-uwsgi --stop /tmp/sinyi-aYi-http.pid
-python $HOME/StorageSpace-daemon.py stop
+python $HOME/taskAgent.py start
+uwsgi --stop /tmp/crm-http.pid
 
 sleep 3
-python $HOME/StorageSpace-daemon.py start
-echo Waiting start StorageSpace-Service...
-sleep 3
-python $HOME/xmpp-daemon.py start
+python $HOME/taskAgent.py start
+uwsgi -x $HOME/bin/http-config.xml
 ;;
 
 *)

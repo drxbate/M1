@@ -4,15 +4,15 @@ How to install uwsgi:
 sudo pip install uwsgi 
  -->
         <!--plugins>python</plugins-->
-        <chdir>/var/aYiAi</chdir>
-        <pythonpath>/var/aYiAi</pythonpath>
+        <chdir>/var/M1/WEB-APP/CRM-APP</chdir>
+        <pythonpath>/var/M1/WEB-APP/CRM-APP</pythonpath>
         <module>httpd</module>
         <callable>app</callable>
-        <!--socket>127.0.0.1:9001</socket-->
+        
         <http>0.0.0.0:8000</http>
-        <master/>
+        <master></master>
         <processes>4</processes>
         <memory-report/>
-        <pidfile>/tmp/sinyi-aYi-http.pid</pidfile>
-        <daemonize>/var/aYiAi/log/uwsgi.log</daemonize>
+        <pidfile>/tmp/cmo-http.pid</pidfile>
+        <daemonize>/var/M1/log/cmo-http.log</daemonize>
 </uwsgi>

@@ -2,7 +2,7 @@
 <!--
 How to install uwsgi:
 sudo apt-get install uwsgi 
- -->
+ --> 
         <plugin>python</plugin>
         <chdir>/var/M1/WEB-APP/CRM-APP</chdir>
         <pythonpath>/var/M1/WEB-APP/CRM-APP</pythonpath>

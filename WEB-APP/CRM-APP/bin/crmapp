@@ -12,13 +12,13 @@ uwsgi -x $HOME/bin/http-config.xml
 
 stop)
 python $HOME/taskAgent.py start
-uwsgi --stop /tmp/crm-http.pid
+uwsgi --stop /tmp/cmo-http.pid
 ;;
 
 restart)
 echo Stoping service
 python $HOME/taskAgent.py start
-uwsgi --stop /tmp/crm-http.pid
+uwsgi --stop /tmp/cmo-http.pid
 
 sleep 3
 python $HOME/taskAgent.py start

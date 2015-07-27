@@ -8,3 +8,4 @@ Created on 2015年7月22日
 from root import homePage
 from security import securityPages
 from cmo import profile
+from demo import demo

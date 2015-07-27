@@ -1,0 +1,134 @@
+{% extends "bootstrap/base.html" %}
+{% block head %}
+{{super()}}
+<!--必要样式-->
+<link rel="stylesheet" href="{{ url_for('static',filename='fullcalendar/fullcalendar.css') }}">
+<link rel="stylesheet" href="{{ url_for('static',filename='fullcalendar/fullcalendar.print.css') }}" media='print'>
+
+<style type="text/css">
+
+	#calendar {
+		max-width: 900px;
+		margin: 0 auto;
+	}
+	.fc-widget-header .fc-day-header{background-color:#339900;color:white}
+	.fc-widget-header .fc-sat,.fc-widget-header .fc-sun{background-color:#FF9900;}
+</style>
+{% endblock %}
+{% block title %}简洁大气的日程安排Jquery特效{% endblock %}
+{% block navbar %}
+<div class="navbar navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">CMO</a>
+        </div>
+         
+        
+    </div>
+</div>
+{% endblock %}
+ 
+{% block content %}
+<div class="container">
+	<div class="container">
+	<div class="content">
+		<div class="row-fluid">
+			<div class="span12">
+				<div class="box">
+					<div class="box-head">
+						<h3>Calendar</h3>
+					</div>
+					<div class="box-content box-nomargin">
+						<div id="calendar"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>	
+</div>
+</div>
+
+{% endblock %}
+{%block scripts%}
+<script type="text/javascript" src="{{url_for('static', filename='js/jquery.js')}}"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+
+	$('#calendar').fullCalendar({
+		defaultDate: '2015-02-12',
+		lang:'zh-cn',
+		editable: true,
+		eventLimit: true, // allow "more" link when too many events
+		events: [
+			{
+				title: 'All Day Event',
+				start: '2015-02-01'
+			},
+			{
+				title: 'Long Event',
+				start: '2015-02-07',
+				end: '2015-02-10'
+			},
+			{
+				id: 999,
+				title: 'Repeating Event',
+				start: '2015-02-09T16:00:00'
+			},
+			{
+				id: 999,
+				title: 'Repeating Event',
+				start: '2015-02-16T16:00:00'
+			},
+			{
+				title: 'Conference',
+				start: '2015-02-11',
+				end: '2015-02-13'
+			},
+			{
+				title: 'Meeting',
+				start: '2015-02-12T10:30:00',
+				end: '2015-02-12T12:30:00'
+			},
+			{
+				title: 'Lunch',
+				start: '2015-02-12T12:00:00'
+			},
+			{
+				title: 'Meeting',
+				start: '2015-02-12T14:30:00'
+			},
+			{
+				title: 'Happy Hour',
+				start: '2015-02-12T17:30:00'
+			},
+			{
+				title: 'Dinner',
+				start: '2015-02-12T20:00:00'
+			},
+			{
+				title: 'Birthday Party',
+				start: '2015-02-13T07:00:00'
+			},
+			{
+				title: 'Click for Google',
+				url: 'http://google.com/',
+				start: '2015-02-28'
+			}
+		]
+	});
+	
+});
+
+</script>
+<script type="text/javascript" src="{{url_for('static', filename='fullcalendar/lib/moment.min.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='fullcalendar/fullcalendar.min.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='fullcalendar/lang-all.js')}}"></script>
+
+
+{% endblock %}

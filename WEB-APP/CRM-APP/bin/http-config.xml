@@ -1,15 +1,15 @@
 <uwsgi>
 <!--
 How to install uwsgi:
-sudo pip install uwsgi 
+sudo apt-get install uwsgi 
  -->
-        <!--plugins>python</plugins-->
+        <plugin>python</plugin>
         <chdir>/var/M1/WEB-APP/CRM-APP</chdir>
         <pythonpath>/var/M1/WEB-APP/CRM-APP</pythonpath>
-        <module>httpd</module>
+        <module>app</module>
         <callable>app</callable>
-        
-        <http>0.0.0.0:8000</http>
+        <protocol>http</protocol>
+        <http>/tmp/cmoapp.sock</http>
         <master></master>
         <processes>4</processes>
         <memory-report/>

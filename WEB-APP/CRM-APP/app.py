@@ -17,6 +17,8 @@ app.debug = True
 app.register_blueprint(homePage,url_prefix= "/")
 app.register_blueprint(securityPages,url_prefix="/security")
 app.register_blueprint(profile,url_prefix="/cmo")
+app.register_blueprint(demo,url_prefix="/demo")
+
 
 bootstrap = Bootstrap(app)
 

@@ -12,6 +12,7 @@ encoding//common/sms.py=utf-8
 encoding//common/utility.py=utf-8
 encoding//httpModules/__init__.py=utf-8
 encoding//httpModules/cmo.py=utf-8
+encoding//httpModules/demo.py=utf-8
 encoding//httpModules/root.py=utf-8
 encoding//httpModules/security.py=utf-8
 encoding//unit-test/_Common/Utility.py=utf-8

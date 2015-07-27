@@ -9,7 +9,7 @@ sudo apt-get install uwsgi
         <module>app</module>
         <callable>app</callable>
         <protocol>http</protocol>
-        <http>/tmp/cmoapp.sock</http>
+        <socket>/tmp/cmoapp.sock</socket>
         <master></master>
         <processes>4</processes>
         <memory-report/>

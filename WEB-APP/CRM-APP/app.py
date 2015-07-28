@@ -11,6 +11,7 @@ from httpModules import *
  
 from flask.ext.bootstrap import Bootstrap
 
+
 app = Flask(__name__,template_folder="templates",static_folder="static")
 app.config['SECRET_KEY'] = '123456'
 app.debug = True
@@ -19,6 +20,10 @@ app.register_blueprint(securityPages,url_prefix="/security")
 app.register_blueprint(profile,url_prefix="/cmo")
 app.register_blueprint(demo,url_prefix="/demo")
 
+#app.jinja_env.add_extension('jinja2.ext.i18n')
+
+from htmlPlugins import FragmentPluginExtension
+app.jinja_env.add_extension(FragmentPluginExtension)
 
 bootstrap = Bootstrap(app)
 

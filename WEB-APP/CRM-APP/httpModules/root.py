@@ -5,11 +5,11 @@ Created on 2015年7月22日
 
 @author: ruixidong
 '''
-from flask import Blueprint
+from flask import Blueprint,redirect
 
 homePage = Blueprint("app",__name__)
 
 @homePage.route("")
 @homePage.route("index.html")
 def __homePage__():
-    return "Hello"
+    return redirect("security/login")

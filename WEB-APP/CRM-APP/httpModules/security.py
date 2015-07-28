@@ -19,7 +19,10 @@ def showLoginForm():
 @securityPages.route("/login",methods=["POST"])
 def valid():
     user,pwd=request.form.get("user"),request.form.get("password")
-    return redirect("../cmo/index.html")
+    if security.User.valid(user, pwd):
+        return redirect("../cmo/index.html")
+    else:
+        render_template("security/login.html",title="title",nickname="nickname",error="用户名或密码错误...")
 
 @securityPages.route("/registion",methods=["GET"])
 def registion():

@@ -11,4 +11,9 @@ profile=Blueprint("cmo",__name__)
 
 @profile.route("/index.html",methods=["GET"])
 def showHomePage():
-    return "Welcome ..."
+    return render_template("cmo/index.html")
+
+
+@profile.route("/leftnav.html")
+def leftnav():
+    return render_template("cmo/index.html",title="hhhh")

@@ -54,6 +54,12 @@ class Session(object):
         self.data = SessionHandler.loadSession(self.ssid)
     def update(self):
         SessionHandler.updateSession(self.ssid, self.data)
+    def __getattribute__(self, *args, **kwargs):
+        name=args[0]
+        if self.data.has_key(name):
+            return self.data[name]
+        else:
+            return object.__getattribute__(self, *args, **kwargs) 
      
 class Registion(object):
     @classmethod

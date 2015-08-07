@@ -6,7 +6,7 @@ Created on 2015年7月22日
 @author: ruixidong
 '''
 from flask import Blueprint,render_template,session,request,redirect,url_for
-from ObjectModules import security
+from ObjectModules import security,HttpContext
 import json,time
 
 
@@ -20,9 +20,10 @@ def showLoginForm():
 def valid():
     user,pwd=request.form.get("user"),request.form.get("password")
     if security.User.valid(user, pwd):
+        HttpContext.Context.createSession(user)
         return redirect("../cmo/index.html")
     else:
-        render_template("security/login.html",title="title",nickname="nickname",error="用户名或密码错误...")
+        return render_template("security/login.html",title="title",nickname="nickname",error=u"用户名或密码错误...")
 
 @securityPages.route("/registion",methods=["GET"])
 def registion():

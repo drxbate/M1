@@ -8,13 +8,14 @@ Created on 2015年7月22日
 import md5,base64
 from DataAccess import User as UserHandler,Session as SessionHandler,Registion as RegistionHandler,Security as SecurityHandler
 from common import utility
+import json
 
 def md5code(s):
     m = md5.new()
     m.update(s)
     return m.hexdigest()
 
-class User(object):
+class User(dict):
     @classmethod
     def createUser(cls,username,password,info={}):
         RegistionHandler.pushRegistQueue(username, password, info)
@@ -28,16 +29,39 @@ class User(object):
     @classmethod
     def exists(cls,username):
         return UserHandler.existsUser(username)
-    def __init__(self,username):
-        self.username = username
-        self.userinfo = UserHandler.getUserInfo(username)
-        self.userid = str(self.userinfo["_id"])
-        
+    def __init__(self,username,data=None):
+        dict.__init__(self)
+        if data==None:
+            self['username'] = username
+            self['userinfo'] = UserHandler.getUserInfo(username)
+            self['userinfo']["_id"]=str(self.userinfo["_id"])
+            self['userid'] = self.userinfo["_id"]
+        else:
+            self.update(data)
+    @property
+    def username(self):
+        return self["username"]
+    @username.setter
+    def username(self,value):
+        self["username"]=value
+    @property
+    def userid(self):
+        return self["userid"]
+    @userid.setter
+    def userid(self,value):
+        self["userid"]=value
+    @property
+    def userinfo(self):
+        return self["userinfo"]
+    @userinfo.setter
+    def userinfo(self,value):
+        self["userinfo"]=value
+    
 class Session(object):
     @classmethod
     def CreateSession(cls,username):
         user = User(username)
-        _id = user.userinfo["_id"]
+        _id = user.userid
         ssid = SessionHandler.createSession(_id)
         s=Session(ssid)
         s.data["user"]=user
@@ -47,19 +71,21 @@ class Session(object):
     def LoadSession(cls,ssid):
         s=Session(ssid)
         s.load()
+        return s
     def __init__(self,ssid):
-        self.ssid=None
+        self.ssid=ssid
         self.data={}
     def load(self):
-        self.data = SessionHandler.loadSession(self.ssid)
+        data = SessionHandler.loadSession(self.ssid)
+        data["user"]=json.loads(data["user"])
+        self.data = User("",data=data)
     def update(self):
         SessionHandler.updateSession(self.ssid, self.data)
-    def __getattribute__(self, *args, **kwargs):
-        name=args[0]
-        if self.data.has_key(name):
-            return self.data[name]
-        else:
-            return object.__getattribute__(self, *args, **kwargs) 
+    @property
+    def userid(self):
+        return str(self.data["user"]["userid"])
+
+
      
 class Registion(object):
     @classmethod

@@ -19,7 +19,7 @@ app.register_blueprint(homePage,url_prefix= "/")
 app.register_blueprint(securityPages,url_prefix="/security")
 app.register_blueprint(profile,url_prefix="/cmo")
 app.register_blueprint(demo,url_prefix="/demo")
-
+app.register_blueprint(cust,url_prefix="/cust")
 #app.jinja_env.add_extension('jinja2.ext.i18n')
 
 from htmlPlugins import FragmentPluginExtension

@@ -1,0 +1,45 @@
+{% extends "common/base.html" %}
+{% block contentBody %}
+<div>
+
+</div>
+<style type="text/css">
+.bg{background-color:black;color:white;font-weight:bolder}
+.btn{cursor:hand}
+</style>
+<table id="cust" class="table table-hover" style="margin-top:5px">
+<thead>
+<tr>
+<th class="col-md-1 bg">客户姓名</th>
+<th class="col-md-1 bg">手机号码</th>
+<th class="col-md-2 bg">标签</th>
+<th class="col-md-1 bg">所在单位</td>
+<th class="col-md-3 bg">居住地址</th>
+<th class="col-md-1 bg"></th>
+</tr>
+<thead>
+<tbody>
+{% for c in cust:%}
+<tr data-id="{{ c.custid }}">
+<td class="col-md-1">{{c.dispName}}</td>
+<td class="col-md-1">{{c.cellphone}}</td>
+<td class="col-md-2">...	</td>
+<td class="col-md-1">{{c.work4}}</td>
+<td class="col-md-3">{{c.homeAdr}}</td>
+<td class="col-md-1"><a class="btn btn-edit" >Edit</a></td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+{% endblock %}
+{% block scripts %}
+<script type="text/javascript">
+	$(function(){
+		$("#cust").find(".btn-edit").bind("click",function(){
+			var p = $(this).parents("tr[data-id]");
+			var cid = p.attr("data-id");
+			location.href="edit?custid="+cid;
+		});
+	});
+</script>
+{% endblock%}

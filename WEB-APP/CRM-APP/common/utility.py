@@ -13,3 +13,4 @@ def generateCode(bits):
     for i in range(0,bits):
         ss+="%d"%ran.randint(0, 9) 
     return ss
+

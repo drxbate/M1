@@ -1,0 +1,88 @@
+{% extends "common/base.html" %}
+{% block title %}
+添加客户资料
+{% endblock %}
+{% block contentBody %}
+<div class="container">
+	<div class="center-block">
+		<h1>添加新客户</h1>
+	</div>
+    <div style="max-width:1000px">
+    <div class="form-group col-sm-8">
+		
+    	<form class="form-horizontal" method="post" enctype="multipart/form-data">
+		  <div id="div1stStep">
+    		  <div>
+				请输入手机号或主要联系电话，系统将检查该是否为老客户...
+			  </div>
+			  <div class="form-group">
+			  	<label for="tvCellPhone" class="col-sm-3 control-label">手机号码/主要联系电话</label>
+			  	<div class="col-sm-8">
+			    <input type="text" class="form-control form-valid" name="cellphone" id="tvCellPhone" placeholder="手机号码">
+			    </div>
+			  </div>
+			  <div id="divWarnCellphone"  class="col-sm-8 col-sm-offset-3 hidden">
+				    <div class="alert alert-danger" role="alert" >
+				    
+				    </div>
+			  </div>
+			  <div class="form-group">
+			  <div class="col-sm-offset-3 col-sm-8">
+			  <button id="btnCheck" type="button" class="btn btn-primary btn-lg">检索</button>
+			  </div>
+			  </div>
+		  </div>
+		  
+		  <div id="div2ndStep">
+		  	  <div>
+		  	  	请选中客户
+		  	  </div>
+		  	  <div class="form-group">
+				  <div class="col-sm-offset-3 col-sm-8" id="custlist">
+				  	
+				  </div>
+			  </div>
+			  <div class="form-group">
+				  <div class="col-sm-offset-3 col-sm-8">
+				  <button id="btnOk" type="button" class="btn btn-primary btn-lg">选中</button>
+				  </div>
+			  </div>
+		  </div>
+		  
+		</form>
+    </div>
+    
+</div>
+{% endblock %}
+{% block scripts %}
+<script type="text/javascript">
+	$(function(){
+
+		$("#div1stStep").show();
+		$("#div2ndStep").hide();
+		
+		$("#btnCheck").bind('click',function(){
+			var tel=$("#tvCellPhone").val();
+			$.getJSON("/cust/my?tel="+tel,function(data){
+				if(data.length>0){
+					$("#div1stStep").hide();
+					$("#div2ndStep").show();
+				}
+				else{
+					$("form:first").submit();
+				}
+				
+				$(data).each(function(n,i){
+					var html="<div data-field='_id'></div><div data-field='dispName'></div><div data-field='cellphone'></div><div data-field='type'></div>";
+					$(html).find("[data-field=_id]").text(i["_id"]);
+					$(html).find("[data-field=dispName]").text(i["dispName"]);
+					$(html).find("[data-field=cellphone]").text(i["cellphone"]);
+					$(html).find("[data-field=type]").text(i["type"]=="PERSON"?"个人":"法人/公司");
+					$("#custlist").append($(html))
+				});
+				
+			});
+		});
+	});
+</script>
+{% endblock %}

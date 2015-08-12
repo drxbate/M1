@@ -26,7 +26,7 @@
 <td class="col-md-2">...	</td>
 <td class="col-md-1">{{c.work4}}</td>
 <td class="col-md-3">{{c.homeAdr}}</td>
-<td class="col-md-1"><a class="btn btn-edit" >Edit</a></td>
+<td class="col-md-1"><a class="btn btn-view" >view</a></td>
 </tr>
 {% endfor %}
 </tbody>
@@ -35,10 +35,10 @@
 {% block scripts %}
 <script type="text/javascript">
 	$(function(){
-		$("#cust").find(".btn-edit").bind("click",function(){
+		$("#cust").find(".btn-view").bind("click",function(){
 			var p = $(this).parents("tr[data-id]");
 			var cid = p.attr("data-id");
-			location.href="edit?custid="+cid;
+			location.href="view?custid="+cid;
 		});
 	});
 </script>

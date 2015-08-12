@@ -1,0 +1,96 @@
+{% extends "common/base.html" %}
+{% block title %}
+添加客户资料
+{% endblock %}
+{% block contentBody %}
+<div class="container">
+	<div class="center-block">
+		<h1>{{ cust.dispName }}</h1>
+		<a href="edit?custid={{ cust.custid }}">Edit</a>
+	</div>
+	<div id="custome_info" style="max-width:1000px">
+		
+		<div class="row">
+			<label for="tvCellPhone" class="col-sm-3 control-label">手机号码</label>
+			<div class="col-sm-8">
+		  	{{ cust.cellphone }}
+		  </div>
+		</div>
+		
+		<div class="row">
+			<label for="tvWork4" class="col-sm-3 control-label">所在公司</label>
+			<div class="col-sm-8">
+		  	{{ cust.work4 }}
+		  </div>
+		</div>
+		<div class="row">
+			<label for="tvHomeAdr" class="col-sm-3 control-label">住址</label>
+			<div class="col-sm-8">
+		  	{{ cust.homeAdr }}
+		  </div>
+		</div>
+	</div>
+	<div id="requirements" class="col-md-12">
+		<div>
+			<button id="btnAddRequirement" type="button" class="btn btn-lg">新增需求</button>
+		</div>
+		{% for i in cust.requirements : %}
+		<div class="row">
+			
+		</div>
+		{% endfor %}
+	</div>
+
+	<div class="modal fade" id="reqInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h4 class="modal-title" id="myModalLabel">需求描述</h4>
+	      </div>
+	      <div class="modal-body">
+	        <div>
+	      		<div style="border-bottom:1px solid #e5e5e5;padding-bottom:10px">
+	      			<select class="form-control" id="ddlRequireClass">
+	      				<option value="buy">购房</option>
+	      				<option value="sale">出售</option>
+	      				<option value=lease>出租</option>
+	      				<option value="leasee">承租</option>
+	      			</select>
+	      		</div>
+	      		<div id="frmBody" style="margin-top:10px;margin-bottom:10px;">
+	      		
+	      		</div>
+	      	</div>
+	      </div>
+	      
+	      <div class="modal-footer">
+	        <a id="btnNew" type="button" class="btn btn-default" >继续添加</a>
+	        <a id="btnContinue" type="button" class="btn btn-primary">关闭</a>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script type="text/javascript">
+	function loadRequireForm(name){
+		$("#reqInfo").find("#frmBody").html("");
+		$.get("form-template/"+name,
+				function(html){
+			$("#reqInfo").find("#frmBody").html(html);
+		});
+	}
+	$(function(){
+		$("#btnAddRequirement").bind('click',function(){
+			loadRequireForm($("#ddlRequireClass").val());
+			$("#reqInfo").modal("show");
+		});
+		$("#ddlRequireClass").bind("change",function(){
+			loadRequireForm(this.value);
+		});
+	});
+	
+	
+</script>
+{% endblock %}

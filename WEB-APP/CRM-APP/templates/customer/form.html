@@ -1,0 +1,173 @@
+{% extends "common/base.html" %}
+{% block title %}
+添加客户资料
+{% endblock %}
+{% block contentBody %}
+<div class="container">
+	<div class="center-block">
+	{% if not cust.custid  %}
+		<h1>添加新客户</h1>
+	{% else %}
+		<h1>修改客户资料</h1>
+	{% endif %}
+	</div>
+	<div id="custome_info" style="max-width:1000px">
+	    <div class="form-group col-sm-8">
+			
+	    	<form class="form-horizontal" method="post" enctype="multipart/form-data" action="save">
+		  	  <input type="hidden" id="hidCustId" name="custid" value="{{cust.custid}}" data-field="custid"/>
+			  <div class="form-group">
+			  	<label for="tvDispName" class="col-sm-3 control-label">客户姓名</label>
+			  	<div class="col-sm-8">
+			    	<input type="text" class="form-control form-valid" name="dispName" id="tvDispName" placeholder="客户姓名"  data-field="dispName" value='{{ cust.dispName }}'>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			  	<label for="tvCellPhone" class="col-sm-3 control-label">手机号码</label>
+			  	<div class="col-sm-8">
+			    	<input type="text" class="form-control form-valid" name="cellphone" id="tvCellPhone" placeholder="手机号码" data-field="cellphone"  value='{{ cust.cellphone }}'>
+			    </div>
+			  </div>
+			  
+			  <div class="form-group">
+			  	<label for="tvWork4" class="col-sm-3 control-label">所在公司</label>
+			  	<div class="col-sm-8">
+			    	<input type="text" class="form-control form-valid" name="work4" id="tvWork4" placeholder="所在公司" data-field="work4"  value="{{ cust.work4 }}">
+			    </div>
+			  </div>
+			  <div class="form-group">
+			  	<label for="tvHomeAdr" class="col-sm-3 control-label">住址</label>
+			  	<div class="col-sm-8">
+			    	<input type="text" class="form-control form-valid" name="homeAdr" id="tvHomeAdr" placeholder="住址" data-field="homeAdr" value="{{ cust.homeAdr }}">
+			    </div>
+			  </div>
+			  <div class="form-group">
+				  <div class="col-sm-offset-3 col-sm-8">
+				  	<button id="btnOk" type="button" class="btn btn-primary btn-lg">保存</button>
+				  </div>
+			  </div>
+			</form>
+	    </div>
+	</div>
+	{% if cust.custid %}
+	<div id="requirements" class="col-md-12">
+		<div>
+			<button id="btnAddRequirement" type="button" class="btn btn-lg">新增需求</button>
+		</div>
+		{% for i in cust.requirements : %}
+		<div class="row">
+			
+		</div>
+		{% endfor %}
+	</div>
+	{% endif %}
+
+	<div class="modal fade" id="newConfirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h4 class="modal-title" id="myModalLabel">保存成功</h4>
+	      </div>
+	      <div class="modal-body">
+	        是否需要继续添加需求？
+	      </div>
+	      <div class="modal-footer">
+	        <a id="btnNew" type="button" class="btn btn-default" href="new">添加另外一笔新客户</a>
+	        <a id="btnContinue" type="button" class="btn btn-primary">继续添加需求</a>
+	        <a id="btnRtnC" type="button" class="btn btn-default" href="all">返回客户列表</a>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<div class="modal fade" id="reqInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h4 class="modal-title" id="myModalLabel">需求描述</h4>
+	      </div>
+	      <div class="modal-body">
+	        <div>
+	      		<div style="border-bottom:1px solid #e5e5e5;padding-bottom:10px">
+	      			<select class="form-control" id="ddlRequireClass">
+	      				<option value="buy">购房</option>
+	      				<option value="sale">出售</option>
+	      				<option value=lease>出租</option>
+	      				<option value="leasee">承租</option>
+	      			</select>
+	      		</div>
+	      		<div id="frmBody" style="margin-top:10px;margin-bottom:10px;">
+	      		
+	      		</div>
+	      	</div>
+	      </div>
+	      
+	      <div class="modal-footer">
+	        <a id="btnNew" type="button" class="btn btn-default" >继续添加</a>
+	        <a id="btnContinue" type="button" class="btn btn-primary">关闭</a>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script type="text/javascript">
+	function loadRequireForm(name){
+		$("#reqInfo").find("#frmBody").html("");
+		$.get("form-template/"+name,
+				function(html){
+			$("#reqInfo").find("#frmBody").html(html);
+		});
+	}
+	$(function(){
+		$("#btnAddRequirement").bind('click',function(){
+			loadRequireForm($("#ddlRequireClass").val());
+			$("#reqInfo").modal("show");
+		});
+		$("#ddlRequireClass").bind("change",function(){
+			loadRequireForm(this.value);
+		});
+		$("#btnOk").bind('click',function(){
+			var isNew=$("#hidCustId").val()=="";
+			var data={}
+			$("input").each(function(n,i){
+				var f = $(i).attr("data-field");
+				if(f==null || f==""){
+					return true;
+				}
+				var v = i.getval?i.getval():$(i).val();
+				data[f] = v;
+			});
+			$.ajax({
+				url:"save",
+				data:data,
+				type:"post",
+				dataType:"json",
+				success:function(data){
+					if(data.state==0){
+						var custid=data.result["custid"];
+						if(isNew){
+							$("#newConfirm").on("hidden.bs.modal",function(e){
+								alert(e);
+							});
+							$("#newConfirm").find("#btnContinue").one('click',function(){
+								location.href="edit?custid="+custid
+							});
+							$("#newConfirm").modal('show');
+							
+						}
+						else{
+							alert("保存成功");
+						}
+					}
+					else{
+						alert("保存失败");
+					}
+				}
+			});
+		});
+	});
+	
+	
+</script>
+{% endblock %}

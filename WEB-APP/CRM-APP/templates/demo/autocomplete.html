@@ -1,0 +1,74 @@
+{% extends "bootstrap/base.html" %}
+{% block head %}
+{{super()}}
+<!--必要样式-->
+<script type="text/javascript" src="{{ url_for('static',filename='js/jquery.js')}}"></script>
+
+<script type="text/javascript" src="{{ url_for('static',filename='js/bootstrap-typeahead.js')}}"></script>
+
+<script type="text/javascript" src="{{ url_for('static',filename='js/rangy-core.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static',filename='js/caret-position.js')}}"></script>
+
+<script type="text/javascript" src="{{ url_for('static',filename='js/bootstrap-tagautocomplete.js')}}"></script>
+<!--  
+<script src="deps/jquery.js"></script>
+<script src="deps/bootstrap-typeahead.js"></script>
+    <script src="deps/rangy-core.js"></script>
+    <script src="deps/caret-position.js"></script>
+    <script src="bootstrap-tagautocomplete.js"></script>
+   -->
+{% endblock %}
+{% block title %}简洁大气的日程安排Jquery特效{% endblock %}
+{% block navbar %}
+<div class="navbar navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">CMO</a>
+        </div>
+         
+        
+    </div>
+</div>
+{% endblock %}
+ 
+{% block content %}
+<div class="container">
+	<div class="container">
+	<div class="content">
+		<div class="row-fluid">
+			<div class="span12">
+				<div class="box">
+					<div class="box-head">
+						<h3>Calendar</h3>
+					</div>
+					<div class="box-content box-nomargin">
+						<div id="autoTag" contenteditable="true">xxx</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>	
+</div>
+</div>
+
+{% endblock %}
+{%block scripts%}
+<script type="text/javascript">
+$(document).ready(function(){
+  $('#autoTag').tagautocomplete({
+    source: ['@ann', '@andrea', '@aaron', '@daryl', '@emma', '@faris', '@june', '@jane', '@jessica', '@john', '@myra', '@maria', '@mariam', '@mention', '@mona', '@omar', '@peter', '@quinn', '@rana', '@sam', '@simon', '@tom', '@upton', '@veronica', '@wayne', '@yasmin', '@zaid', '#work', '#product', '#marketing', '#customer'],
+    character: '@#'  
+  });
+  $('#calendar').first().focus();
+});
+
+</script>
+
+
+{% endblock %}

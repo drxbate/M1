@@ -78,8 +78,8 @@ class MyCustomer(Customer):
     def query_all(self):
         return self.query()
     def get(self,custid):
-        a = self.query(filter={"_id":ObjectId(custid)})
-        return a
+        for i in self.query(filter={"_id":ObjectId(custid)}):
+            return i
 
 class CustomerAdapter(DataAdapter):
     @property

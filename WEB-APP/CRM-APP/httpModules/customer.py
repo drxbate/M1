@@ -41,14 +41,14 @@ def _new():
     tel = request.form.get("cellphone")
     customer=MyCustomer()
     cust = customer.get(custid)
-    if request.path!="/cust/new":
-        for i in cust:
-            if request.path!="/cust/view":
-                return render_template("customer/form.html",cust=i)
-            else:
-                return render_template("customer/view.html",cust=i)
-    else:
+    if request.path=="/cust/new":
         return  render_template("customer/form.html",cust=None)
+    else:
+        if request.path=="/cust/edit":
+            return render_template("customer/form.html",cust=cust)
+        else:
+            return render_template("customer/view.html",cust=cust)
+    
 
 @cust.route("/save",methods=["GET","POST"])
 def _save():
@@ -86,6 +86,13 @@ def mycust():
         l.append(i)
     return json.dumps(l)
 
+@cust.route("/requirement/new")
+def requirement():
+    custid = request.args.get("custid")
+    reqid = request.args.get("reqid")
+    cust = MyCustomer().get(custid)
+    req = None
+    return render_template("customer/requirement.html",cust=cust,req=req)
 
 @cust.route("/form-template/<name>")
 def form_template(name):

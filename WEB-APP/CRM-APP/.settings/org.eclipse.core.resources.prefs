@@ -26,6 +26,7 @@ encoding//httpModules/demo.py=utf-8
 encoding//httpModules/metadata.py=utf-8
 encoding//httpModules/root.py=utf-8
 encoding//httpModules/security.py=utf-8
+encoding//httpModules/selector.py=utf-8
 encoding//setup/data_city.py=utf-8
 encoding//unit-test/_Common/Utility.py=utf-8
 encoding//unit-test/_DataAccess/Customer.py=utf-8

@@ -2,14 +2,15 @@
 	<div class="form-group">
 		<label for="tvHomeAdr" class="col-sm-3 control-label">行政区</label>
 		<div class="col-sm-8"> 	
-			<input type="text" class="form-control form-valid Selector" 
-			name="homeAdr" 
+			<input type="text" class="form-control form-valid selector" 
+			name="district" 
 			id="tvHomeAdr" 
-			placeholder="选择行政区" 
-			
-			control-data="city"
+			placeholder="选择行政区"
+			 
+			selector="district"
+			value-of-control="hidDistrict"
 			>
-			
+			<input type="hidden" id="hidDistrict" />
 	  </div>
 	</div>
 

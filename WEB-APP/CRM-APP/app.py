@@ -5,6 +5,14 @@ Created on 2015年7月22日
 
 @author: ruixidong
 '''
+import sys
+reload(sys)
+
+setdefaultencoding = getattr(sys, "setdefaultencoding")
+
+if setdefaultencoding:
+    setdefaultencoding("utf8")
+    
 from flask import Flask, g, request,Response,url_for,redirect
 import os
 from httpModules import *
@@ -21,6 +29,7 @@ app.register_blueprint(profile,url_prefix="/cmo")
 app.register_blueprint(demo,url_prefix="/demo")
 app.register_blueprint(cust,url_prefix="/cust")
 app.register_blueprint(metadata,url_prefix="/metadata")
+app.register_blueprint(selector,url_prefix="/selector")
 #app.jinja_env.add_extension('jinja2.ext.i18n')
 
 from htmlPlugins import FragmentPluginExtension

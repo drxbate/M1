@@ -1,0 +1,58 @@
+{% extends "common/dialog.html" %}
+{% block navbarBrand %}
+选择行政区
+{% endblock %}
+{% block contentBody %}
+<div class=" container-fluid">
+	<div>
+	
+	<ul class="nav nav-tabs" role="tablist">
+		{% for city in citys %}
+	    	<li role="presentation" class="{{'active' if city.cd=='001'}}">
+	    	<a href="#{{city.cd}}" aria-controls="home" role="tab" data-toggle="tab">{{city.name}}</a>
+	    	</li>
+		{% endfor %}
+  	</ul>
+  	</div>
+	<div class="tab-content">
+	{% for city in citys %}
+    <div role="tabpanel" {%-if city.cd=='001' -%}class="tab-pane active col-md-8" {% else %} class="tab-pane col-md-8" {% endif -%} id="{{city.cd}}">
+		
+    		<div class="row">
+    			<div class="col-md-1">
+    			<a href="#" class="btn" data-role="close" return-type='json' return-value='{"city":"{{ city.cd }}"}'>{{ city.name }}</a>
+    			</div>
+    		</div>
+    		{% for district in city.districts %}
+    		<div class="row" style="border-top:1px #e5e5e5 solid;">
+    			<div class="col-md-8">
+    				<a href="#" class="btn lead" data-role="close" return-type='json' return-value='{"city":"{{ city.cd }}","district":"{{ district.cd }}"}'>{{ district.name }}</a>
+    			</div>
+    			
+    			<div class="col-md-8" style="border-top:1px #e5e5e5 dashed;">
+    				{% for bd in district.businessDistricts %}
+    					<span>
+    						<a href="#" class="btn" data-role="close" return-type='json' return-value='{"city":"{{ city.cd }}","district":"{{ district.cd }}","bussinessDistrict":"{{ bd.cd }}"}'>{{ bd.name }}</a>
+    					</span>	
+    				{% endfor %}
+				</div>
+    		</div>
+    		{% endfor %}
+    		
+		</div>
+    {% endfor %}
+	</div>
+	
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script type="text/javascript">
+	$(function(){
+
+		$("#btnOk").click(function(){
+			closeMe();
+		});
+	});
+</script>
+{% endblock %}

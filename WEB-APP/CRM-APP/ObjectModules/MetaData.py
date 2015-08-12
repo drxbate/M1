@@ -27,3 +27,34 @@ def getBusinessDistrict(city,district):
         cd = bd.split(":")[-1]
         name = getData("district",district,cd)
         yield cd,name.strip() 
+        
+class ZoneInfo(object):
+    @classmethod
+    def getCitys(cls):
+        z=ZoneInfo()
+        def __items__():
+            return getCitys()
+        z.__items__=__items__
+        z.__parent__ = None
+        return z
+    @property
+    def districts(self):
+        z = ZoneInfo()
+        def __items__():
+            return getDistrict(self.cd)
+        z.__items__=__items__
+        z.__parent__=self
+        return z
+    @property
+    def businessDistricts(self):
+        z = ZoneInfo()
+        def __items__():
+            return getBusinessDistrict(self.__parent__.cd,self.cd)
+        z.__items__=__items__
+        z.__parent__=self
+        return z
+    def __iter__(self):
+        for cd,name in self.__items__():
+            self.cd = cd
+            self.name = name
+            yield self

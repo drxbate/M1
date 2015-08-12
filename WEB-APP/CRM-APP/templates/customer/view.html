@@ -6,7 +6,7 @@
 <div class="container">
 	<div class="center-block">
 		<h1>{{ cust.dispName }}</h1>
-		<a href="edit?custid={{ cust.custid }}">Edit</a>
+		<a href="javascript:" onclick="showDialog('edit?custid={{ cust.custid }}');">Edit</a>
 	</div>
 	<div id="custome_info" style="max-width:1000px">
 		
@@ -41,7 +41,7 @@
 		{% endfor %}
 	</div>
 
-	<div class="modal fade" id="reqInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<!-- <div class="modal fade" id="reqInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 	  <div class="modal-dialog" role="document">
 	    <div class="modal-content">
 	      <div class="modal-header">
@@ -69,26 +69,28 @@
 	      </div>
 	    </div>
 	  </div>
-	</div>
+	</div> -->
 </div>
 {% endblock %}
 {% block scripts %}
+<script type="text/javascript" src="{{url_for('static',filename='js/jquery.dialog.js')}}"></script>
 <script type="text/javascript">
-	function loadRequireForm(name){
+	/* function loadRequireForm(name){
 		$("#reqInfo").find("#frmBody").html("");
 		$.get("form-template/"+name,
 				function(html){
 			$("#reqInfo").find("#frmBody").html(html);
 		});
-	}
+	} */
 	$(function(){
 		$("#btnAddRequirement").bind('click',function(){
-			loadRequireForm($("#ddlRequireClass").val());
-			$("#reqInfo").modal("show");
+			/* loadRequireForm($("#ddlRequireClass").val());
+			$("#reqInfo").modal("show"); */
+			showDialog("requirement/new?custid={{cust.custid}}");
 		});
-		$("#ddlRequireClass").bind("change",function(){
+		/* $("#ddlRequireClass").bind("change",function(){
 			loadRequireForm(this.value);
-		});
+		}); */
 	});
 	
 	

@@ -5,11 +5,18 @@ Created on 2015年8月11日
 
 @author: ruixidong
 '''
+import sys
+reload(sys)
+
+setdefaultencoding = getattr(sys, "setdefaultencoding")
+
+if setdefaultencoding:
+    setdefaultencoding("utf8")
+    
 from DataAccess.Handler import RedisCli
 
 
-
-data = """
+data = u"""
 001,上海
 002,苏州
 003,杭州
@@ -865,9 +872,10 @@ if __name__=="__main__":
             continue
         cd,name=i.split(",",2)
         if len(cd)==3:
-            RedisCli.set("metadata:district:%s"%cd,name)
+            RedisCli.set("metadata:district:%s"%cd,name.encode("utf8"))
         elif len(cd)==6:
-            RedisCli.set("metadata:district:%s:%s"%(cd[:3],cd[3:]),name)
+            RedisCli.set("metadata:district:%s:%s"%(cd[:3],cd[3:]),name.encode("utf8"))
         elif len(cd)==9:
-            RedisCli.set("metadata:district:%s:%s:%s"%(cd[:3],cd[3:6],cd[6:]), name)
+            RedisCli.set("metadata:district:%s:%s:%s"%(cd[:3],cd[3:6],cd[6:]), name.encode("utf8"))
+            
     

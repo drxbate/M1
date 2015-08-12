@@ -1,0 +1,117 @@
+{% extends "common/dialog.html" %}
+{% block navbarBrand %}
+{% if not req.custid  %}
+		添加需求
+	{% else %}
+		修改需求
+	{% endif %}
+{% endblock %}
+{% block contentBody %}
+<div class="container" >
+	<div id="req_info" data-id="{{req.reqid}}">
+	    <div class="form-group col-sm-12">
+			
+	    	<form class="form-horizontal" method="post" enctype="multipart/form-data" action="save">
+		  	  <div class="modal-header">
+		        <h4 class="modal-title" id="myModalLabel">需求描述</h4>
+		      </div>
+		      <div class="modal-body">
+		        <div>
+		      		<div style="border-bottom:1px solid #e5e5e5;padding-bottom:10px">
+		      			<select class="form-control" id="ddlRequireClass">
+		      				<option value="buy">购房</option>
+		      				<option value="sale">出售</option>
+		      				<option value=lease>出租</option>
+		      				<option value="leasee">承租</option>
+		      			</select>
+		      		</div>
+		      		<div id="frmBody" style="margin-top:10px;margin-bottom:10px;">
+		      		
+		      		</div>
+		      	</div>
+		      </div>
+		      
+		      <div class="modal-footer">
+		        <a id="btnNew" type="button" class="btn btn-default" >保存</a>
+		        <a id="btnNewContinue" type="button" class="btn btn-default" >保存并新增需求</a>
+		        <a id="btnClose" type="button" class="btn btn-primary" data-role="close">关闭</a>
+		      </div>
+			</form>
+	    </div>
+	</div>	
+</div>
+{% endblock %}
+{% block scripts %}
+<script type="text/javascript" src="{{url_for('static',filename='js/jquery.dialog.js')}}"></script>
+<script type="text/javascript">
+function loadRequireForm(name){
+	$("#frmBody").html("");
+	$.get("../form-template/"+name,
+			function(html){
+		$("#frmBody").html(html);
+		bindSelector();
+	});
+}
+$(function(){
+	loadRequireForm($("#ddlRequireClass").val());
+	$("#ddlRequireClass").bind("change",function(){
+		loadRequireForm(this.value);
+	});
+	$("#btnNew").bind("click",function(){
+		save({"callback":function(state){
+			if(state.state==0){
+				alert("保存成功");
+				$("#req_info").attr("data-id",state.result["reqid"]);
+			}
+			else{
+				alert("保存失败");
+			}
+		}});
+	});
+});	
+function save(option){
+	var _option={
+			"callback":function(state){}
+	};
+	
+	$.extend(_option,option);
+	var data = {};
+	
+	$(".DataField").each(function(i,e){
+		var nm=$(e).attr("field-name");
+		var va=$(e).val();
+		data[nm]=va;
+	});
+	var _data = {custid:'{{cust.custid}}',reqid:$("#req_info").attr("data-id")};
+	
+	$.extend(data,_data);
+	$.ajax({
+		type:"POST",
+		url:"save",
+		data:data,
+		dataType:"json",
+		success:function(json){
+			callback(json);
+		}
+	});
+}
+
+function bindSelector(){
+	$(".selector").each(function(i,e){
+		
+		$(e).unbind("click");
+		$(e).bind("click",function(){
+			var selector = $(e).attr("selector");
+			showDialog("/selector/"+selector,{
+					width:600,
+					height:400,
+					closed:function(value){
+						alert(value);
+					}
+				});
+		});
+		
+	});
+}
+</script>
+{% endblock %}

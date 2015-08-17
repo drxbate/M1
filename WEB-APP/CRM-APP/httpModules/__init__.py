@@ -12,3 +12,5 @@ from demo import demo
 from customer import cust
 from metadata import metadata
 from selector import selector
+from extjs import ext as extjs
+from system import admin

@@ -3,14 +3,15 @@
 {% block title %}{{ title }}{% endblock %}
 {% block head%}
 {{ super() }}
+<link rel="stylesheet" href="/static/awe/css/font-awesome.min.css"></link>
 <style type="text/css">
 	.navbar{margin-bottom:0px;}
 	.left-nav{background-color:white;padding-left:0px}
 	.left-nav .nav-block{background-color:#ececec;border-right:1px solid #eee;padding-left:5px;padding-right:5px;}
 	#__NAV_BAR__ .focus{color:#000;font-weight:bolder;}
-	
 </style>
 <script type="text/javascript" src="{{url_for('static', filename='js/jquery.js')}}"></script>
+<script type="text/javascript" src="/js/ext.js"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
 <script type="text/javascript">
 	var CURRENT_NAV_ID="{{ NAV_ID }}";

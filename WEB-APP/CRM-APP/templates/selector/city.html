@@ -1,0 +1,32 @@
+{% extends "common/dialog.html" %}
+{% block navbarBrand %}
+选择城市
+{% endblock %}
+{% block contentBody %}
+{% cache 60*5 %}
+<div class=" container-fluid">
+
+	{% for city in citys %}
+    <div class">
+		
+    		<div class="row">
+    			<div class="col-md-1">
+    			<a href="#" class="btn" data-role="close" return-type='json' return-value='{"value":"{{ city.cd }}::","dispName":"{{ city.name }}"}'>{{ city.name }}</a>
+    			</div>
+    		</div>
+    		
+		</div>
+    {% endfor %}
+</div>
+{% endcache %}
+{% endblock %}
+{% block scripts %}
+<script type="text/javascript">
+	$(function(){
+
+		$("#btnOk").click(function(){
+			closeMe();
+		});
+	});
+</script>
+{% endblock %}

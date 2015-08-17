@@ -1,4 +1,4 @@
-__all__=["utility"]
+__all__=["utility","cacheManager"]
 
 from ItemsCollection import ItemsCollection
 from DataAdapter import DataAdapter

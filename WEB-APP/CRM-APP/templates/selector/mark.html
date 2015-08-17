@@ -1,0 +1,273 @@
+{% extends "common/dialog.html" %}
+{% block head%}
+{{ super() }}
+<link rel="stylesheet" href="/static/mark/mark.default.css"></link>
+{% endblock %}
+{% block navbarBrand %}
+选择标签
+{% endblock %}
+{% block headExt %}
+<div class="pull-right navbar-brand" >
+	<div id="ddlConfirm" class="btn-group" style="margin-top:-6px">
+      <button id="btnOK" class="btn btn-primary">确认</button>
+	  <button id="btnConfirm" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	  	 <span class="caret"></span>
+	  </button>
+	  <ul class="dropdown-menu">
+	    <li><a href="#" id="btnCancel" >取消</a></li>
+	  </ul>
+	</div>
+</div>
+{% endblock %}
+            
+{% block contentBody %}
+<style type="text/css">
+	#mark-list{margin-top:10px}
+	#mark-list .mark-item{margin-top:5px;}
+	#mark-list .mark-item .checkitem span {
+		display: inline-block;
+    	font: normal normal normal 14px/1 FontAwesome;
+    	font-size: inherit;
+    	text-rendering: auto;
+    	-webkit-font-smoothing: antialiased;
+		
+	}
+	#mark-list .mark-item .checkitem span:before{
+		content: "\f096";
+	}
+	#mark-list .mark-item .selected:before{
+		content: "\f046" !important;
+		color:green;
+	}
+</style>
+<div class=" container-fluid">
+	<div class="row">
+		<div class="col-xs-5" id="mark-list">
+		
+		</div>
+		<div class="col-xs-5  pull-right">
+		<div  id="frmMarkEditor" class="panel panel-default" style="margin-top:10px">
+		<div class="panel-heading">添加标签</div>
+		
+		<div class="panel-body">
+			<form class="form-horizontal">
+				
+				<div class="form-group">
+					<label for="mark-text" class="col-xs-4 control-label">文字描述</label>
+					<div class="col-xs-8"> 	
+						<input type="text" id="mark-text">
+				  </div>
+				</div>
+				
+				<div class="form-group">
+						<label for="tvMemo" class="col-xs-4 control-label">显示样式</label>
+						<div class="col-xs-8">
+							
+							<!-- Single button -->
+							<div id="ddlMarkStyle" class="btn-group" selected-css="">
+							  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							    <span class="mark-example">选中样式 Selected</span> <span class="caret"></span>
+							  </button>
+							  <ul class="dropdown-menu">
+							  	<li><a href="#" mark-css="mark-style-default">默认样式 Default</a></li>
+							    <li><a href="#" mark-css="mark-style-1">样式1 Style1</a></li>
+							    <li><a href="#" mark-css="mark-style-2">样式2 Style2</a></li>
+							    <li><a href="#" mark-css="mark-style-3">样式3 Style3</a></li>
+							  </ul>
+							</div>
+						</div>
+				</div>
+				<div class="form-group">
+						<label for="tvMemo" class="col-xs-4 control-label">附加标签</label>
+						<div class="col-xs-8">
+							
+							<div id="ddlIcon" class="btn-group" selected-icon="" selected-color="">
+							  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							    <span class="icon"></span>图标 <span class="caret"></span>
+							  </button>
+							  <ul class="dropdown-menu">
+							  	<li><a href="#" icon="" >无图标</a></li>
+							    <li><a href="#" icon="exclamation" color="red" ></a></li>
+							    <li><a href="#" icon="flag" color="red"></a></li>
+							    <li><a href="#" icon="flag" color="#F79036"></a></li>
+							    <li><a href="#" icon="flag" color="blue"></a></li>
+							    <li><a href="#" icon="flag" color="green"></a></li>
+							    <li><a href="#" icon="key" color="#F79036"></a></li>
+							    <li><a href="#" icon="home" color="home"></a></li>
+							    <li><a href="#" icon="user" color="green"></a></li>
+							    <li><a href="#" icon="star" color="#F79036"></a></li>
+							  </ul>
+							</div>
+				  	</div>				  
+				</div>
+				<div class="form-group" id="mark-review">
+					<label class="col-xs-4 control-label">样式预览</label>
+					<div class="col-xs-8"><span class="mark"><span class="icon"></span><span class="text">...</span></span></div>
+				</div>
+				<div class="form-group" id="mark-review">
+					<div class="col-xs-8 col-md-offset-4">
+						<input type="button" value="添加" class="btn" id="btnAdd" >
+					</div>
+				</div>
+			</form>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script type="text/javascript">
+	$.fn.extend({
+		configMark:function(options){
+			var e = $(this);
+			e.find(".text").text(options["mark-text"]==""?"...":options["mark-text"]);
+			e.removeClass().addClass("mark mark-style "+options["mark-style"]);
+			e.find(".icon").removeClass().addClass("icon fa fa-"+options["mark-icon"]).css("color",options["mark-icon-color"]);
+			e.attr("mark-id",options["mark-id"])
+				.attr("mark-text",options["mark-text"])
+				.attr("mark-style",options["mark-style"])
+				.attr("mark-icon",options["mark-icon"])
+				.attr("mark-icon-color",options["mark-icon-color"])
+				.attr("mark-lock",options["mark-lock"]);
+		},
+		createMark:function(options){
+			var e = $("<span class='mark'><span class='icon'></span><span class='text'></span></span>");
+			if(options){
+				e.configMark(options);
+			}
+			return e;
+		},
+		getOptions:function(){
+			return {
+				"mark-id":$("#mark-id").val(),
+				"mark-text":$("#mark-text").val(),
+				"mark-style":$("#ddlMarkStyle").attr("selected-css"),
+				"mark-icon":$("#ddlIcon").attr("selected-icon"),
+				"mark-icon-color":$("#ddlIcon").attr("selected-color")
+			};
+		},
+		updateReview:function(){
+			$("#mark-review .mark").configMark($(this).getOptions());
+		},
+		addToList:function(){
+			
+			var e=$(this);
+			
+			var mItem = $("<div class='mark-item row'><div class='col-xs-1 checkitem'><span></span></div><div class='mark-content col-xs-7'></div><div class='control col-xs-1'></div></div>");
+			mItem.find(".mark-content").append(e);
+			mItem.find(".checkitem").click(function(){
+				$(this).find("span").toggleClass("selected");
+			});
+			
+			$("#mark-list").append(mItem);
+			
+			mItem.hover(function(){
+				var lockTag = e.attr("mark-lock");
+				if(lockTag=="1"){
+					return;
+				}
+					
+				if($(this).find(".del").length<=0)
+				{
+					$(this).find(".control").append($("<span class='del fa fa-trash' style='color:green'>"));
+				
+					$(this).find(".del").bind("click",function(){
+						
+						$.post("mark/del/"+e.attr("mark-id"),function(data){
+							if(data.state==0){
+								mItem.remove();		
+							}
+							else{
+								alert("删除失败");
+							}
+						},"json");
+						
+					});
+				}
+			},
+			function(){
+				$(this).find(".del").fadeOut("slow",
+						function(){
+							$(this).remove();
+						}
+				);
+			});
+			
+			
+		}
+	});
+	
+	
+	
+	$(function(){
+		
+		$("#btnOk").click(function(){
+			closeMe();
+		});
+
+		$("#btnAdd").click(function(){
+			var options = $("#frmMarkEditor").getOptions();
+			
+			$.post("mark/add",
+					{"icon":options["mark-icon"],"iconColor":options["mark-icon-color"],"style":options["mark-style"],"text":options["mark-text"]},
+					function(data){
+						if(data.state==0){
+							options["mark-id"]=data.id;
+							$(document).createMark(options).addToList();
+						}
+						else{
+							alert("提交失败");
+						}
+					},
+					"json"
+			);
+			
+		});
+		
+		$("#mark-text").bind("change",function(){$(this).updateReview();})
+		
+		$("#ddlMarkStyle .dropdown-menu a").each(function(i,e){
+			var mcss = $(e).attr("mark-css");
+			$(e).wrapInner("<span class='mark-style "+mcss+"'></span");
+		});
+		
+		$("#ddlMarkStyle .dropdown-menu a").click(function(){
+			var mcss = $(this).attr("mark-css");
+			$("#ddlMarkStyle").attr("selected-css",mcss);
+			$("#ddlMarkStyle .mark-example").removeClass().addClass("mark-style").addClass(mcss);
+			$(this).updateReview();
+		});
+		
+		$("#ddlIcon .dropdown-menu a").each(function(i,e){
+			var mcss = $(this).attr("icon");
+			var color = $(this).attr("color");
+			$(e).wrapInner("<span class='fa fa-"+mcss+"' style='color:"+color+"'></span");
+		});
+		
+		$("#ddlIcon .dropdown-menu a").click(function(){
+			var icon = $(this).attr("icon");
+			var color = $(this).attr("color");
+			$("#ddlIcon").attr("selected-icon",icon).attr("selected-color",color);
+			$("#ddlIcon .icon").removeClass().addClass("icon fa fa-"+icon).css("color",color);
+			$(this).updateReview();
+		});
+		
+	});
+</script>
+<script type="text/javascript">
+	$(function(){
+		
+		{%- for mark in marks -%}
+		$(document).createMark({
+			"mark-id":'{{ mark.__id__ }}',
+			"mark-text":'{{ mark.text }}',
+			"mark-style":'{{ mark.style }}',
+			"mark-icon":'{{ mark.icon }}',
+			"mark-icon-color":'{{ mark.iconColor }}',
+			"mark-lock":{{ "1" if mark.__lock__==true else "0" }}
+		}).addToList();
+		{% endfor %}
+		
+	});
+</script>
+{% endblock %}

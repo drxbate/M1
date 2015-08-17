@@ -7,6 +7,13 @@
 	{% endif %}
 {% endblock %}
 {% block contentBody %}
+<style type="text/css">
+.mark-container{
+	width:100%;
+	min-height:30px;
+	background-color:#e5e5e5;
+}
+</style>
 <div class="container" >
 	<div id="req_info" data-id="{{req.reqid}}">
 	    <div class="form-group col-sm-12">
@@ -42,14 +49,15 @@
 </div>
 {% endblock %}
 {% block scripts %}
-<script type="text/javascript" src="{{url_for('static',filename='js/jquery.dialog.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static',filename='js/ext.mark.js')}}"></script>
 <script type="text/javascript">
 function loadRequireForm(name){
 	$("#frmBody").html("");
 	$.get("../form-template/"+name,
 			function(html){
-		$("#frmBody").html(html);
-		bindSelector();
+		var e = $("#frmBody").html(html);
+		e.bindSelector();
+		e.initMark();
 	});
 }
 $(function(){
@@ -96,22 +104,5 @@ function save(option){
 	});
 }
 
-function bindSelector(){
-	$(".selector").each(function(i,e){
-		
-		$(e).unbind("click");
-		$(e).bind("click",function(){
-			var selector = $(e).attr("selector");
-			showDialog("/selector/"+selector,{
-					width:600,
-					height:400,
-					closed:function(value){
-						alert(value);
-					}
-				});
-		});
-		
-	});
-}
 </script>
 {% endblock %}

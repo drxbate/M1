@@ -1,0 +1,31 @@
+
+.mark-style {
+	margin:2px;
+	padding:2px;
+	-moz-border-radius: 5px;      /* Gecko browsers */
+    -webkit-border-radius: 5px;   /* Webkit browsers */
+    border-radius:5px;            /* W3C syntax */
+}
+
+.mark-style-default {
+}
+
+.mark-style-1 {
+	color:#0950d0;
+	font-weight:bold;
+	background-color:#e5e5e5;
+	border:1px #000 solid;
+}
+.mark-style-2 {
+	color:green;
+	font-weight:bold;
+	background-color:#e5e5e5;
+	border:1px #000 solid;
+}
+.mark-style-3 {
+	color:green;
+	font-weight:bold;
+	background-color:#e5e5e5;
+}
+
+.mark .text{margin-left:5px;}

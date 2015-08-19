@@ -52,19 +52,20 @@ class Mark:
             return False
     
 class Marks(__profile__):
-    def __init__(self):
+    def __init__(self,cls):
         __profile__.__init__(self)
         self.__items__=[]
+        self.cls=cls
     @property
     def items(self):
         if len(self.__items__)<=0:
-            l=Profile.getHashTable("__global__", "mark")
+            l=Profile.getHashTable("__global__", "%s:mark"%self.cls)
             for k,i in l.items():
                 m=Mark.descerialize(i)
                 m.__lock__=True
                 self.__items__.append(m)
                 
-            l=Profile.getHashTable(self.uid, "mark")
+            l=Profile.getHashTable(self.uid, "%s:mark"%self.cls)
             for k,i in l.items():
                 self.__items__.append(Mark.descerialize(i))
         return self.__items__
@@ -73,14 +74,14 @@ class Marks(__profile__):
             yield i
     def append(self,*items):
         for i in items:
-            Profile.updateHashTable(self.uid, "mark", i.__id__,Mark.serialize(i))
+            Profile.updateHashTable(self.uid, "%s:mark"%self.cls, i.__id__,Mark.serialize(i))
     def remove(self,mark):
         _id=""
         if type(mark)==Mark:
             _id = mark.__id__
         else:
             _id = mark
-        Profile.removeHashTable(self.uid,"mark",_id)
+        Profile.removeHashTable(self.uid,"%s:mark"%self.cls,_id)
         self.items.remove(mark)
 
 

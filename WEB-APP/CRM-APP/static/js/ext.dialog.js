@@ -3,6 +3,7 @@ function showDialog(url,options){
 	var _options={
 			width:800,
 			height:600,
+			load:function(){},
 			closed:function(state){
 			}
 	};
@@ -42,6 +43,8 @@ function showDialog(url,options){
 				closeMe();
 			}
 		});
+		
+		_options.load(this.contentWindow);
 	});
 	
 	

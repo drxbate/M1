@@ -11,7 +11,7 @@ reload(sys)
 setdefaultencoding = getattr(sys, "setdefaultencoding")
 
 if setdefaultencoding:
-    setdefaultencoding("utf8")
+    setdefaultencoding("utf8") 
 
 #init flask app ---begin
     

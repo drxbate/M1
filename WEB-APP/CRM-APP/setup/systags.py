@@ -17,7 +17,7 @@ tags=[dict(__id__="cs01",text="诚意客户",style="mark-style-1",icon="flag",ic
       ]
 
 if __name__=="__main__":
-    RedisCli.delete("profile:__global__:mark")
+    RedisCli.delete("profile:__global__:cust:mark")
     
     for i in tags:
         m = Mark()

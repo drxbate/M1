@@ -1,7 +1,5 @@
 {% extends "common/base.html" %}
-{% block title %}
-添加客户资料
-{% endblock %}
+
 {% block contentBody %}
 <div class="container">
 	<div class="center-block">
@@ -37,61 +35,34 @@
 		{% for i in cust.requirements : %}
 		<div class="row">
 			
+			
+			{{ render_buy(i) }}
+			
 		</div>
 		{% endfor %}
 	</div>
-
-	<!-- <div class="modal fade" id="reqInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-	  <div class="modal-dialog" role="document">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <h4 class="modal-title" id="myModalLabel">需求描述</h4>
-	      </div>
-	      <div class="modal-body">
-	        <div>
-	      		<div style="border-bottom:1px solid #e5e5e5;padding-bottom:10px">
-	      			<select class="form-control" id="ddlRequireClass">
-	      				<option value="buy">购房</option>
-	      				<option value="sale">出售</option>
-	      				<option value=lease>出租</option>
-	      				<option value="leasee">承租</option>
-	      			</select>
-	      		</div>
-	      		<div id="frmBody" style="margin-top:10px;margin-bottom:10px;">
-	      		
-	      		</div>
-	      	</div>
-	      </div>
-	      
-	      <div class="modal-footer">
-	        <a id="btnNew" type="button" class="btn btn-default" >继续添加</a>
-	        <a id="btnContinue" type="button" class="btn btn-primary">关闭</a>
-	      </div>
-	    </div>
-	  </div>
-	</div> -->
 </div>
 {% endblock %}
 {% block scripts %}
 <script type="text/javascript">
-	/* function loadRequireForm(name){
-		$("#reqInfo").find("#frmBody").html("");
-		$.get("form-template/"+name,
-				function(html){
-			$("#reqInfo").find("#frmBody").html(html);
-		});
-	} */
 	$(function(){
 		$("#btnAddRequirement").bind('click',function(){
-			/* loadRequireForm($("#ddlRequireClass").val());
-			$("#reqInfo").modal("show"); */
 			showDialog("requirement/new?custid={{cust.custid}}");
 		});
-		/* $("#ddlRequireClass").bind("change",function(){
-			loadRequireForm(this.value);
-		}); */
+		$(".btnReqEdit").bind("click",function(){
+			var reqid=$(this).attr("data-id");
+			showDialog("requirement/edit?custid={{cust.custid}}&&req="+reqid);
+		});
 	});
 	
 	
 </script>
 {% endblock %}
+{% set FaceTo=dict(S="南") %}
+{% macro render_buy(req) %}
+	<div>购房</div>
+	<div>{{req.district}}</div>
+	<div>{{req.marks}}</div>
+	<div>{{req.Bedroom}}房/{{req.Livingroom}}厅/{{req.Bathroom}}卫 {{FaceTo[req.FaceTo]}}</div>
+	<div><a class="btnReqEdit" href="#" data-id="{{req._id}}">Edit</a></div>
+{% endmacro %}

@@ -9,7 +9,7 @@
 {% block headExt %}
 <div class="pull-right navbar-brand" >
 	<div id="ddlConfirm" class="btn-group" style="margin-top:-6px">
-      <button id="btnOK" class="btn btn-primary">确认</button>
+      <button id="btnOk" class="btn btn-primary">确认</button>
 	  <button id="btnConfirm" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 	  	 <span class="caret"></span>
 	  </button>
@@ -40,7 +40,7 @@
 		color:green;
 	}
 </style>
-<div class=" container-fluid">
+<div class="container-fluid">
 	<div class="row">
 		<div class="col-xs-5" id="mark-list">
 		
@@ -117,27 +117,21 @@
 {% endblock %}
 {% block scripts %}
 <script type="text/javascript">
+	var clsName="{{cls}}";
 	$.fn.extend({
-		configMark:function(options){
-			var e = $(this);
-			e.find(".text").text(options["mark-text"]==""?"...":options["mark-text"]);
-			e.removeClass().addClass("mark mark-style "+options["mark-style"]);
-			e.find(".icon").removeClass().addClass("icon fa fa-"+options["mark-icon"]).css("color",options["mark-icon-color"]);
-			e.attr("mark-id",options["mark-id"])
-				.attr("mark-text",options["mark-text"])
-				.attr("mark-style",options["mark-style"])
-				.attr("mark-icon",options["mark-icon"])
-				.attr("mark-icon-color",options["mark-icon-color"])
-				.attr("mark-lock",options["mark-lock"]);
+		
+		getConfig:function(){
+			return {
+				"mark-id":$(this).attr("mark-id"),
+				"mark-text":$(this).attr("mark-text"),
+				"mark-style":$(this).attr("mark-style"),
+				"mark-icon":$(this).attr("mark-icon"),
+				"mark-icon-color":$(this).attr("mark-icon-color"),
+				"mark-lock":$(this).attr("mark-lock"),
+				}
 		},
-		createMark:function(options){
-			var e = $("<span class='mark'><span class='icon'></span><span class='text'></span></span>");
-			if(options){
-				e.configMark(options);
-			}
-			return e;
-		},
-		getOptions:function(){
+		
+		getEditValue:function(){
 			return {
 				"mark-id":$("#mark-id").val(),
 				"mark-text":$("#mark-text").val(),
@@ -147,7 +141,7 @@
 			};
 		},
 		updateReview:function(){
-			$("#mark-review .mark").configMark($(this).getOptions());
+			$("#mark-review .mark").configMark($(this).getEditValue());
 		},
 		addToList:function(){
 			
@@ -173,7 +167,7 @@
 				
 					$(this).find(".del").bind("click",function(){
 						
-						$.post("mark/del/"+e.attr("mark-id"),function(data){
+						$.post(clsName+"/del/"+e.attr("mark-id"),function(data){
 							if(data.state==0){
 								mItem.remove();		
 							}
@@ -202,13 +196,21 @@
 	$(function(){
 		
 		$("#btnOk").click(function(){
-			closeMe();
+			var ll=[];
+			$("#mark-list .selected").parents(".mark-item").find(".mark").each(function(i,e){
+				ll.push($(e).getConfig());
+			});
+			closeMe(ll);
+		});
+		
+		$("#btnCancel").click(function(){
+			closeMe(false);
 		});
 
 		$("#btnAdd").click(function(){
-			var options = $("#frmMarkEditor").getOptions();
+			var options = $("#frmMarkEditor").getEditValue();
 			
-			$.post("mark/add",
+			$.post(clsName+"/add",
 					{"icon":options["mark-icon"],"iconColor":options["mark-icon-color"],"style":options["mark-style"],"text":options["mark-text"]},
 					function(data){
 						if(data.state==0){
@@ -253,10 +255,14 @@
 		});
 		
 	});
+	function select(ll){
+		$(ll).each(function(i,e){
+			$("#mark-list .mark[mark-id="+e+"]").parents(".mark-item").find(".checkitem span").toggleClass("selected");
+		});
+	}
 </script>
 <script type="text/javascript">
 	$(function(){
-		
 		{%- for mark in marks -%}
 		$(document).createMark({
 			"mark-id":'{{ mark.__id__ }}',
@@ -266,6 +272,7 @@
 			"mark-icon-color":'{{ mark.iconColor }}',
 			"mark-lock":{{ "1" if mark.__lock__==true else "0" }}
 		}).addToList();
+		
 		{% endfor %}
 		
 	});

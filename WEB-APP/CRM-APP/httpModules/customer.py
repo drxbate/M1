@@ -87,12 +87,30 @@ def mycust():
     return json.dumps(l)
 
 @cust.route("/requirement/new")
+@cust.route("/requirement/edit")
 def requirement():
     custid = request.args.get("custid")
     reqid = request.args.get("reqid")
     cust = MyCustomer().get(custid)
-    req = None
+    req = cust.requirements.get(reqid)
     return render_template("customer/requirement.html",cust=cust,req=req)
+
+@cust.route("/requirement/save",methods=["POST"])
+def save_requirement():
+    custid = request.form.get("custid")
+    reqid = request.form.get("reqid")
+    cust = MyCustomer().get(custid)
+    
+    reqinfo={}
+    for k,item in request.form.items():
+        if k in ["custid","reqid"]:
+            continue
+        reqinfo[k]=item
+    
+    req = cust.requirements
+    req.save(reqid=reqid,**reqinfo)
+    
+    return json.dumps(dict(state=0,data=dict(reqid="")))
 
 @cust.route("/form-template/<name>")
 def form_template(name):

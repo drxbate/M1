@@ -53,14 +53,17 @@ def count(owner,filter):
     custs=MongoCli.Customer["custinfo"].find(filter)
     return custs.count()
 
+def getOwner(custid):
+    cust = MongoCli.Customer["custinfo"].find_one({'_id':ObjectId(custid)},{"__owner__":1})
+    return cust["__owner__"]
+
 def saveCustomer(owner="",custid="",cellPhone="",dispName="",type="PERSON",exinfo={},tags=[],requirements=[]):
     #custid=None while creating a customer
     
     custinfo={}
     custinfo.update(dict(__owner__=owner,type=type,cellphone=cellPhone,dispName=dispName,__exinfo__=exinfo,__tags__=tags,__req__=requirements))
     if custid!=None:
-        cust = MongoCli.Customer["custinfo"].find_one({'_id':ObjectId(custid)},{"__owner__":1})
-        if cust["__owner__"]!=owner:
+        if getOwner(custid)!=owner:
             raise Exception("非当前用户客户，不可进行修改")
         else:
             MongoCli.Customer["custinfo"].update({'_id':ObjectId(custid)},custinfo)
@@ -70,4 +73,31 @@ def saveCustomer(owner="",custid="",cellPhone="",dispName="",type="PERSON",exinf
         custinfo.update(dict(__new_time__=ts))
         custid = MongoCli.Customer["custinfo"].save(custinfo)
     return custid
+
+def queryRequirement(owner="",custid="",reqid=""):
+    if getOwner(custid)!=owner:
+        raise Exception("非当前用户客户，不可进行修改")
+    filter=dict(__custid__=ObjectId(custid))
+    if reqid!="":
+        filter["_id"]=reqid
+        
+    req=MongoCli.Customer["requirement"].find(filter)
+    return req
+
+def saveRequirement(owner="",custid="",reqid="",reqinfo={}):
+    if custid=="" or custid==None:
+        raise Exception("客户id不可为空") 
+    else:
+        if getOwner(custid)!=owner:
+            raise Exception("非当前用户客户，不可进行修改")
+        
+    reqinfo["__custid__"]=ObjectId(custid)
+    if reqid!="" and reqid!=None:
+        reqinfo["_id"]=ObjectId(reqid)
+        MongoCli.Customer["requirement"].update({'_id':ObjectId(reqid),'__custid__':ObjectId(custid)},reqinfo)
+    else:
+        reqinfo.has_key("_id") and reqinfo.pop("_id")
+        reqid = MongoCli.Customer["requirement"].save(reqinfo)
+    return reqid
+ 
     

@@ -97,6 +97,19 @@ class CustomerAdapter(DataAdapter):
         return str(self.__data__["_id"])
     @property
     def requirements(self):
-        return self.__data__["__req__"]
+        return RequirementCollection(owner=self.__owner__, custid=self.custid)
+    
+class RequirementCollection(ItemsCollection):
+    def __init__(self,owner,custid,):
+        ItemsCollection.__init__(self, CustomerHandler.queryRequirement(owner=owner, custid=custid), adapterClass=RequirementAdapter)
+        self.__custid__=custid
+        self.__owner__=owner
+    def save(self,reqid=None,**reqinfo):
+        CustomerHandler.saveRequirement(owner=self.__owner__, custid=self.__custid__,reqid=reqid,reqinfo=reqinfo)
+    def get(self,reqid):
+        return [RequirementAdapter(i) for i in self.__cur__ if str(i["_id"])==reqid]
+        
+class RequirementAdapter(DataAdapter):
+    pass
     
     

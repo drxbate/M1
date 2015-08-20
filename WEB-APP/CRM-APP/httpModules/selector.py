@@ -34,7 +34,8 @@ def __query_mark__(cls):
         return json.dumps(dict(state=0,data=[]))
     m = Profile.Marks(cls)
     l=ids.split(",")
-    ll = [i for i in m if i.__id__ in l]
+    ll = [i.__dict__ for i in m if i.__id__ in l]
+    
     return json.dumps(dict(state=0,data=ll))
 
 @selector.route("/mark/<cls>/add",methods=["POST"])

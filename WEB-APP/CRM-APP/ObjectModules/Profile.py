@@ -27,15 +27,7 @@ class Mark:
         return m
     @classmethod
     def serialize(cls,mark):
-        return json.dumps(
-                          dict(
-                               __id__=mark.__id__,
-                               icon=mark.icon,
-                               iconColor=mark.iconColor,
-                               style=mark.style,
-                               text=mark.text,
-                               )
-                          )
+        return json.dumps(mark.__dict__())
     @classmethod
     def descerialize(cls,text):
         d=dict(__id__="",icon="",iconColor="",style="",text="",)
@@ -50,6 +42,14 @@ class Mark:
             return self.__id__ == obj.__id__
         else:
             return False
+    def __dict__(self):
+        return dict(
+           __id__=self.__id__,
+           icon=self.icon,
+           iconColor=self.iconColor,
+           style=self.style,
+           text=self.text,
+           )
     
 class Marks(__profile__):
     def __init__(self,cls):

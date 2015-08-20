@@ -31,7 +31,7 @@
 		      <div class="modal-body">
 		        <div>
 		      		<div style="border-bottom:1px solid #e5e5e5;padding-bottom:10px">
-		      			<select class="data-field" id="ddlRequireClass" field-name="RequireClass">
+		      			<select class="DataField" id="ddlRequireClass" field-name="RequireClass" value="{{req.RequireClass}}">
 		      				<option value="buy">购房</option>
 		      				<option value="sale">出售</option>
 		      				<option value=lease>出租</option>
@@ -56,17 +56,20 @@
 {% endblock %}
 {% block scripts %}
 <script type="text/javascript">
-function loadRequireForm(name){
+function loadRequireForm(name,options){
+	var _options={"loaded":function(e){}};
+	$.extend(_options,options);
 	$("#frmBody").html("");
 	$.get("../form-template/"+name,
 			function(html){
 		var e = $("#frmBody").html(html);
 		e.bindSelector();
 		e.initMark();
+		_options.loaded(e);
 	});
 }
 $(function(){
-	loadRequireForm($("#ddlRequireClass").val());
+
 	$("#ddlRequireClass").bind("change",function(){
 		loadRequireForm(this.value);
 	});
@@ -75,6 +78,18 @@ $(function(){
 			if(state.state==0){
 				alert("保存成功");
 				$("#req_info").attr("data-id",state.result["reqid"]);
+			}
+			else{
+				alert("保存失败");
+			}
+		}});
+	});
+	$("#btnNewContinue").bind("click",function(){
+		save({"callback":function(state){
+			if(state.state==0){
+				alert("保存成功");
+				loadRequireForm($("#ddlRequireClass").val());
+				$("#req_info").attr("data-id","");
 			}
 			else{
 				alert("保存失败");
@@ -104,10 +119,42 @@ function save(option){
 		data:data,
 		dataType:"json",
 		success:function(json){
-			callback(json);
+			_option.callback(json);
 		}
 	});
 }
+
+</script>
+<script type="text/javascript">
+$(function(){
+	var data=null;
+			{% if req!=None %}
+			data = {
+      		{%for k,v in req%}
+      		"{{ k }}":"{{ v }}",
+      		{% endfor %}
+      		};
+			{% endif %}
+	if(!data){
+		loadRequireForm($("#ddlRequireClass").val());
+	}
+	else{
+		$("#ddlRequireClass").val(data["RequireClass"]);
+		loadRequireForm(
+				$("#ddlRequireClass").val(),
+				{
+					loaded:function(body){
+						$(".DataField").each(function(i,e){
+							var nm=$(e).attr("field-name");
+							$(e).val(data[nm]);
+						});
+						$(body).find(".mark-container").setMarks($(body).find(".mark-container").val());
+					}
+				}
+		);
+	}
+   		
+});
 
 </script>
 {% endblock %}

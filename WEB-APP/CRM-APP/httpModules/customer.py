@@ -90,9 +90,10 @@ def mycust():
 @cust.route("/requirement/edit")
 def requirement():
     custid = request.args.get("custid")
-    reqid = request.args.get("reqid")
+    reqid = request.args.get("req")
     cust = MyCustomer().get(custid)
     req = cust.requirements.get(reqid)
+    
     return render_template("customer/requirement.html",cust=cust,req=req)
 
 @cust.route("/requirement/save",methods=["POST"])

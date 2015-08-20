@@ -1,6 +1,7 @@
 {% extends "common/base.html" %}
 
 {% block contentBody %}
+<link rel="stylesheet" href="/static/mark/mark.default.css?1"></link>
 <div class="container">
 	<div class="center-block">
 		<h1>{{ cust.dispName }}</h1>
@@ -34,10 +35,18 @@
 		</div>
 		{% for i in cust.requirements : %}
 		<div class="row">
-			
-			
-			{{ render_buy(i) }}
-			
+			{% if i.RequireClass=="buy" %}
+				{{ render_buy(i) }}
+			{% endif %}
+			{% if i.RequireClass=="sale" %}
+				{{ render_sale(i) }}
+			{% endif %}
+			{% if i.RequireClass=="lease" %}
+				{{ render_lease(i) }}
+			{% endif %}
+			{% if i.RequireClass=="leasee" %}
+				{{ render_leasee(i) }}
+			{% endif %}
 		</div>
 		{% endfor %}
 	</div>
@@ -53,16 +62,39 @@
 			var reqid=$(this).attr("data-id");
 			showDialog("requirement/edit?custid={{cust.custid}}&&req="+reqid);
 		});
+		
+		$("#requirements").initMark();
 	});
 	
 	
 </script>
 {% endblock %}
-{% set FaceTo=dict(S="南") %}
+{% set FaceTo=dict(S="南",SE="东南",SW="西南",N="北",NE="东北",NW="西北",E="东",W="西") %}
 {% macro render_buy(req) %}
-	<div>购房</div>
-	<div>{{req.district}}</div>
-	<div>{{req.marks}}</div>
-	<div>{{req.Bedroom}}房/{{req.Livingroom}}厅/{{req.Bathroom}}卫 {{FaceTo[req.FaceTo]}}</div>
-	<div><a class="btnReqEdit" href="#" data-id="{{req._id}}">Edit</a></div>
+	<div class="col-xs-1">购房</div>
+	<div class="col-xs-2">{{req.district}}</div>
+	<div class="col-xs-2">{{req.Bedroom}}房/{{req.Livingroom}}厅/{{req.Bathroom}}卫 {{FaceTo[req.FaceTo]}}</div>
+	<div class="col-xs-3 mark-container" value="{{req.marks}}" mark-class="buy"></div>
+	<div class="col-xs-1"><a class="btnReqEdit" href="#" data-id="{{req._id}}">Edit</a></div>
+{% endmacro %}
+{% macro render_sale(req) %}
+	<div class="col-xs-1">出售</div>
+	<div class="col-xs-2">{{req.district}}</div>
+	<div class="col-xs-2">{{req.Bedroom}}房/{{req.Livingroom}}厅/{{req.Bathroom}}卫 {{FaceTo[req.FaceTo]}}</div>
+	<div class="col-xs-3 mark-container" value="{{req.marks}}" mark-class="sale"></div>
+	<div class="col-xs-1"><a class="btnReqEdit" href="#" data-id="{{req._id}}">Edit</a></div>
+{% endmacro %}
+{% macro render_lease(req) %}
+	<div class="col-xs-1">出租</div>
+	<div class="col-xs-2">{{req.district}}</div>
+	<div class="col-xs-2">{{req.Bedroom}}房/{{req.Livingroom}}厅/{{req.Bathroom}}卫 {{FaceTo[req.FaceTo]}}</div>
+	<div class="col-xs-3 mark-container" value="{{req.marks}}" mark-class="lease"></div>
+	<div class="col-xs-1"><a class="btnReqEdit" href="#" data-id="{{req._id}}">Edit</a></div>
+{% endmacro %}
+{% macro render_leasee(req) %}
+	<div class="col-xs-1">承租</div>
+	<div class="col-xs-2">{{req.district}}</div>
+	<div class="col-xs-2">{{req.Bedroom}}房/{{req.Livingroom}}厅/{{req.Bathroom}}卫 {{FaceTo[req.FaceTo]}}</div>
+	<div class="col-xs-3 mark-container" value="{{req.marks}}" mark-class="leasee"></div>
+	<div class="col-xs-1"><a class="btnReqEdit" href="#" data-id="{{req._id}}">Edit</a></div>
 {% endmacro %}

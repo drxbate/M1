@@ -107,9 +107,16 @@ class RequirementCollection(ItemsCollection):
     def save(self,reqid=None,**reqinfo):
         CustomerHandler.saveRequirement(owner=self.__owner__, custid=self.__custid__,reqid=reqid,reqinfo=reqinfo)
     def get(self,reqid):
-        return [RequirementAdapter(i) for i in self.__cur__ if str(i["_id"])==reqid]
+        for i in self.__cur__:
+            if str(i["_id"])==reqid:
+                return RequirementAdapter(i)
         
 class RequirementAdapter(DataAdapter):
-    pass
+    def __iter__(self):
+        for k,v in self.__data__.items():
+            yield (k,v,)
+    @property
+    def reqid(self):
+        return self.__data__["_id"]
     
     

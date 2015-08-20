@@ -8,7 +8,7 @@
  */
 $.fn.extend({
 		initMark:function(){
-			var container=$(this).find(".mark-container")
+			var container=$(this).find(".mark-container");
 			container.each(function(i,e){
 				var marks=[];
 				$(".mark").each(function(i,e){
@@ -73,11 +73,12 @@ $.fn.extend({
 		
 		setMarks:function(marks){
 			var cls=$(this).attr("mark-class");
+			var container=$(this);
 			$.post("/selector/mark/"+cls+"/query",
 					{"ids":marks},
 					function(json){
 						if(json.state==0){
-							$(json.data,function(i,e){
+							$.each(json.data,function(i,e){
 									var opt={
 										"mark-id":e["__id__"],
 										"mark-text":e["text"],

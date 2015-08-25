@@ -16,7 +16,9 @@ RedisCli=RedisHandler()
 
 class MongoHandler(object):
     def __init__(self):
-        self.client=MongoClient("mongodb://root:access4Me@119.37.1.44:27017")
+        if not hasattr(MongoHandler, "DATABASE"):
+            setattr(MongoHandler, "DATABASE", MongoClient("mongodb://root:access4Me@119.37.1.44:27017"))
+        self.client=getattr(MongoHandler,"DATABASE")
     def opendb(self,name):
         db = self.client.get_database(name)
         #db.authenticate("root","root")
@@ -27,6 +29,5 @@ class MongoHandler(object):
     @property
     def Customer(self):
         return self.opendb("customerdb")
-     
 
 MongoCli=MongoHandler()

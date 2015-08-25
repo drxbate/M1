@@ -6,6 +6,7 @@ Created on 2015年7月25日
 @author: ruixidong
 '''
 import random
+import md5,base64
 
 def generateCode(bits):
     ran = random.Random()
@@ -14,3 +15,7 @@ def generateCode(bits):
         ss+="%d"%ran.randint(0, 9) 
     return ss
 
+def md5code(s):
+    m = md5.new()
+    m.update(s)
+    return m.hexdigest()

@@ -64,7 +64,7 @@
 	      <div class="modal-footer">
 	        <a id="btnNew" type="button" class="btn btn-default" href="new">添加另外一笔新客户</a>
 	        <a id="btnContinue" type="button" class="btn btn-primary">继续添加需求</a>
-	        <a id="btnRtnC" type="button" class="btn btn-default" href="all">返回客户列表</a>
+	        <a id="btnRtnC" type="button" class="btn btn-default" href="#" data-role="close">返回客户列表</a>
 	      </div>
 	    </div>
 	  </div>
@@ -99,13 +99,36 @@
 					if(data.state==0){
 						var custid=data.result["custid"];
 						if(isNew){
-							$("#newConfirm").on("hidden.bs.modal",function(e){
+							/*$("#newConfirm").on("hidden.bs.modal",function(e){
 								alert(e);
 							});
 							$("#newConfirm").find("#btnContinue").one('click',function(){
 								location.href="edit?custid="+custid
 							});
-							$("#newConfirm").modal('show');
+							$("#newConfirm").modal('show');*/
+							showMessage({
+								"width":640,
+								"height":480,
+								"title":"保存成功",
+								"body":"是否需要继续添加需求？",
+								"buttons":[
+								           {"id":"new","text":"添加另外一笔新客户"},
+								           {"id":"req","text":"继续添加需求"},
+								           {"id":"rtn","text":"返回客户列表"},
+								           ],
+								"defaultButton":"rtn",
+								"closed":function(state){
+									if(state=="new"){
+										location.hef="new";
+									}
+									else if(state=="req"){
+										location.href="requirement/new?custid="+custid;
+									}
+									else if(state=="rtn"){
+										closeMe();
+									}
+								},
+							});
 							
 						}
 						else{

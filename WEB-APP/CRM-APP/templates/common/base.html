@@ -12,7 +12,7 @@
 </style>
 <script type="text/javascript" src="{{url_for('static', filename='js/jquery.js')}}"></script>
 <script type="text/javascript" src="/js/ext.js"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='bootstrap/js/bootstrap.js') }}"></script>
 <script type="text/javascript">
 	var CURRENT_NAV_ID="{{ NAV_ID }}";
 	if(CURRENT_NAV_ID!=""){
@@ -33,6 +33,10 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="/">CMO</a>
+            
+        </div>
+        <div class="pull-right" style="font-size:18pt;margin-right:-100px" >
+            <a class="navbar-brand fa fa-cog" href="/admin" title="系统设置"></a>
         </div>
     </div>
 </div>
@@ -45,6 +49,7 @@
 		{% block leftNav %}
 		{% plugin 'leftNav'	 %}{% endplugin %}
 		{% endblock %}
+	
 	</div>
 	<div class="col-md-10">
 		{% block contentBody %}{% endblock %}

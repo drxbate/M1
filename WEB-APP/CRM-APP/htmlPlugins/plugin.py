@@ -26,6 +26,10 @@ def __rend_plugin__(name):
     if plugins.has_key(name):
         func,template=plugins[name]
         context=func()
+        if context.has_key("__template__"):
+            template=context["__template__"]
+        else:
+            context["__template__"]=template
         return render_template(template,**context)
     else:
         return {}
@@ -46,7 +50,7 @@ class FragmentPluginExtension(Extension):
         # add the defaults to the environment
         environment.extend(
             fragment_cache_prefix='',
-            fragment_cache=None
+            fragment_cache=None,
         )
 
     def parse(self, parser):

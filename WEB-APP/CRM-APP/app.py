@@ -19,14 +19,16 @@ from flask import Flask, g, request,Response,url_for,redirect
 import os
  
 from flask.ext.bootstrap import Bootstrap
-from common import cacheManager
+from common import cacheManager,Logger
 
 app = Flask(__name__,template_folder="templates",static_folder="static")
 app.config['SECRET_KEY'] = '123456'
 app.debug = True
+app.logger.addHandler(Logger.get("WWW").Loghandler)
 
-from htmlPlugins import FragmentPluginExtension
+from htmlPlugins import FragmentPluginExtension,RolePluginExtension
 app.jinja_env.add_extension(FragmentPluginExtension)
+app.jinja_env.add_extension(RolePluginExtension)
 
 bootstrap = Bootstrap(app)
 cacheManager.init_cache(app)

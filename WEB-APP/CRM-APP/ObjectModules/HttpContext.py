@@ -21,5 +21,8 @@ class __context__(object):
         if not hasattr(self,"__session__") or getattr(self, "__session__")==None:
             self.__session__=security.Session.LoadSession(session["session"]["id"])
         return self.__session__
-    
+    @property
+    def Roles(self):
+        sess = self.CurrentSession.roles
+        
 Context=__context__()

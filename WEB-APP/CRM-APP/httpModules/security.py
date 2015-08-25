@@ -6,7 +6,8 @@ Created on 2015年7月22日
 @author: ruixidong
 '''
 from flask import Blueprint,render_template,session,request,redirect,url_for
-from ObjectModules import security,HttpContext
+from ObjectModules import HttpContext,security
+
 import json,time
 
 
@@ -52,7 +53,7 @@ def confirmCode():
     user,code=request.form.get("user"),request.form.get("code")
     if security.Registion.validCode(user, code):
         ss = security.Session.CreateSession(user)
-        session["ssid"]=ss.ssid
+        session["security"]=ss.ssid
         return redirect("../cmo/index.html")
     else:
         return redirect("security/registion-confirm-form?user=%s&error=invalidcode"%user)

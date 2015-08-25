@@ -11,7 +11,14 @@ import json
 
 admin = Blueprint("system",__name__)
 
+@admin.route("/")
+def __index__():
+    return render_template("admin/index.html")
+
 @admin.route("/clear-cache")
 def __clearCache__():
     cacheManager.clear()
     return json.dumps(dict(state=0))
+
+
+    

@@ -12,6 +12,9 @@ class User(SecurityObject):
     def createUser(cls,username,password,info={}):
         RegistionHandler.pushRegistQueue(username, password, info)
     @classmethod
+    def changePassword(cls,username,password):
+        UserHandler.changePassword(username, password)
+    @classmethod
     def updateUserInfo(cls,username,info={}):
         pass
     @classmethod

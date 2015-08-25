@@ -19,16 +19,18 @@ class SecurityObject(dict):
         return SecurityHandler.get_rights(self.__obj_id__)
     def allow(self,right):
         rv = SecurityHandler.check_right(self.__obj_id__, right)
-        if rv==0:
+        if rv=='0':
             return 0
-        elif rv==1:
+        elif rv=='1':
             return 1
         
         rv = -1
         for i in self.get_parents():
-            if i.allow==0:
+            if i == None:
+                continue
+            if i.allow(right)==0:
                 return 0
-            elif i.allow==1:
+            elif i.allow(right)==1:
                 rv = 1
             
         return rv

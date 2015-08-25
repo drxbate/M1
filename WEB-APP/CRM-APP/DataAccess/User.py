@@ -12,7 +12,8 @@ from bson import ObjectId
 
 
 def parseUser(username):
-    if username.index("@")>0:
+    
+    if username.find("@")>0:
         username,domain = tuple(username.split("@",2))
     else:
         domain=""
@@ -21,13 +22,21 @@ def parseUser(username):
 
 def createUser(username,password,**options):
     username,domain=parseUser(username)
+    filter=dict(username=username,__domain__=domain)
     data = dict(
                 username=username,
                 password=password,
                 __domain__=domain,
-                __groups__=options["groups"]
+                __groups__=[] if not options.has_key("groups") else options["groups"]
                 )
-    return MongoCli.User["authinfo"].save(data)
+    MongoCli.User["authinfo"].update(filter,data,True,False)
+    for i in MongoCli.User["authinfo"].find(filter):
+        return str(i["_id"])
+
+def changePassword(username,password):
+    username,domain=parseUser(username)
+    filter=dict(username=username,__domain__=domain)
+    return MongoCli.User["authinfo"].update(filter,{"$set":{"password":password}})
 
 def addGroup(username,*groups):
     username,domain=parseUser(username)

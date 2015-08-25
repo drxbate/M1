@@ -29,11 +29,31 @@ class RolePluginExtension(Extension):
     def parse(self, parser):
         lineno = parser.stream.next().lineno
         args = [parser.parse_expression()]
-        body = parser.parse_statements(['noright','name:endplugin'], drop_needle=True)
-        body_0 = parser.parse_statements(['name:endplugin'], drop_needle=True)
-        return nodes.CallBlock(self.call_method('_render_plugin', args),
-                               [], [], body).set_lineno(lineno)
-
-    def _render_plugin(self, role, caller):
+        #allow = Context.CurrentSession.allow(args.value)
+        self.bodys=[]
+        end_tokens=['name:noright','name:endrole']
+        while 1:
+            body = parser.parse_statements(end_tokens, drop_needle=False)
+            self.bodys.append(body)
+            
+            token = parser.stream.next()
+            if token.test("name:noright"):
+                
+                end_tokens.pop(0)
+                continue
+            elif token.test("name:endrole"):
+                break
         
-        return caller()
+        result = nodes.If(
+                          self.call_method('check_allow',args), #Expression
+                          self.bodys[0], #True
+                          None if len(self.bodys)<2 else self.bodys[1] #Else
+                          ).set_lineno(lineno)
+        return result
+    def check_allow(self,role):
+        allow = Context.CurrentSession.allow(role)
+        return allow==1
+    def _render_plugin(self, caller):
+        return caller()  
+        
+    

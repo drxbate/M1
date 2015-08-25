@@ -7,7 +7,11 @@
 	
 	<div><a href="#" onclick="showDialog('/cust/new');">通用</a></div>
 	<div class="col-md-offset-1"><a data-role="CUST_FAV" href="/cust/fav">修改密码</a></div>
-	{% role admin %}
+	{% role "admin" %}
+	<div><a href="#" onclick="showDialog('/cust/new');">系统管理</a></div>
+	<div class="col-md-offset-1"><a data-role="CUST_FAV" href="/cust/fav">域管理</a></div>
+	<div class="col-md-offset-1"><a data-role="CUST_FAV" href="/cust/fav">组管理</a></div>
+	<div class="col-md-offset-1"><a data-role="CUST_FAV" href="/cust/fav">账户管理</a></div>
 	{% endrole %}
 	
 </div>

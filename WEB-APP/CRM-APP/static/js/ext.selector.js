@@ -14,24 +14,30 @@
 $.fn.extend({
 		bindSelector:function(){
 			$(this).find(".selector").each(function(i,e){
-				
-				$(e).unbind("click");
-				$(e).bind("click",function(){
-					var control=this;
-					var selector = $(e).attr("selector");
-					showDialog("/selector/"+selector,{
-							width:600,
-							height:400,
-							closed:function(value){
-								var dis = $(control).attr("display-of-control");
-								if(dis){$(dis).val(value.dispName);}else{$(control).val(value.dispName);}
-								var val = $(control).attr("value-of-control");
-								if(val){$(val).val(value.value);}else{$(control).val(value.value);}
-								
-							}
-						});
-				});
-				
+				if($(e).attr("data-init")!="1"){
+					var ig=$("<div class='input-group'></div>");
+					$(e).wrap(ig);
+					var container=$(e).parent();
+					container.append($("<div class='input-group-addon'><span class='fa fa-th-list' style='font-size:12pt'></span></div>"));
+					
+					$(e).attr("data-init","1");
+					container.unbind("click");
+					container.bind("click",function(){
+						var control=$(this).find(".selector");
+						var selector = $(e).attr("selector");
+						var parameter = $(e).attr("selector-parameter");
+						showDialog("/selector/"+selector+"?"+parameter,{
+								width:600,
+								height:400,
+								closed:function(value){
+									$(control).val(value.dispName);
+									var val = $(control).attr("value-of-control");
+									if(val){$(val).val(value.value);}else{$(control).val(value.value);}
+									
+								}
+							});
+					});
+				}
 			});
 		}
 });

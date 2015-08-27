@@ -23,10 +23,10 @@ function showDialog(url,options){
 	e.modal("show");
 	e.on('hidden.bs.modal', function (e) {
 		  // do something...
-		_options.closed($(e.target).data("state"));
+		_options.closed(_options["result"]);
 	});	
 	var closeMe=function(state){
-		e.data("state",state);
+		_options["result"]=state;
 		e.modal("hide");
 	};
 	

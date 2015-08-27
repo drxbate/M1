@@ -1,17 +1,17 @@
 
 <div id="__NAV_BAR__" class="nav-block">
-	<div><a href="#" onclick="showDialog('/cust/new');">客户系统设置</a></div>
+	<div><a href="#">客户系统设置</a></div>
 	<div class="col-md-offset-1"><a data-role="CUST_FAV" href="/cust/fav">客户详情栏位</a></div>
 	<div class="col-md-offset-1"><a data-role="CUST_NEW_LIST" href="/cust/newlist">客户需求配置</a></div>
-	<div class="col-md-offset-1"><a data-role="" href="/task/alarm">标签管理</a></div>
+	<div class="col-md-offset-1"><a data-role="" href="/cust/flag">标签管理</a></div>
 	
-	<div><a href="#" onclick="showDialog('/cust/new');">通用</a></div>
-	<div class="col-md-offset-1"><a data-role="CUST_FAV" href="/cust/fav">修改密码</a></div>
+	<div><a href="#">通用</a></div>
+	<div class="col-md-offset-1"><a data-role="CUST_FAV" href="chgpwd">修改密码</a></div>
 	{% role "admin" %}
-	<div><a href="#" onclick="showDialog('/cust/new');">系统管理</a></div>
-	<div class="col-md-offset-1"><a data-role="CUST_FAV" href="/cust/fav">域管理</a></div>
-	<div class="col-md-offset-1"><a data-role="CUST_FAV" href="/cust/fav">组管理</a></div>
-	<div class="col-md-offset-1"><a data-role="CUST_FAV" href="/cust/fav">账户管理</a></div>
+	<div><a href="#">系统管理</a></div>
+	<div class="col-md-offset-1"><a data-role="CUST_FAV" href="domain">域管理</a></div>
+	<div class="col-md-offset-1"><a data-role="CUST_FAV" href="group">组管理</a></div>
+	<div class="col-md-offset-1"><a data-role="CUST_FAV" href="accounts">账户管理</a></div>
 	{% endrole %}
 	
 </div>

@@ -58,6 +58,13 @@ def getUserInfo(username):
 def existsUser(username):
     return getPassword(username)!=None
 
+def getUsers(domain,groups=None):
+    filters=dict(__domain__=domain)
+    if groups!=None:
+        filters["__groups__"]={"$all":groups}
+    
+    return MongoCli.User["authinfo"].find(filters)
+
 def find_domain(**filter): 
     """
     filter:{id:...,parent:...}
@@ -67,13 +74,20 @@ def find_domain(**filter):
     if filter.has_key("id"):
         __filters__["_id"]=ObjectId(filter["id"])
     if filter.has_key("parent"):
-        __filters__["__parent__"]=ObjectId(filter["parent"])
+        __filters__["__parent__"]=filter["parent"]
     return MongoCli.User["domain"].find(__filters__)
 
-def update_domain(name,parent,info={}):
+def update_domain(name,parent,id=None,info={}):
     data=dict(__parent__=parent,domain=name,info=info)
-    return MongoCli.User["domain"].update({"domain":name},data,True,False)
-    
+    if id==None:
+        return MongoCli.User["domain"].update({"domain":name},data,True,False)
+    else:
+        return MongoCli.User["domain"].update({"_id":ObjectId(id)},data,True,False)
+
+def find_group(id):
+    __filter__=dict(_id=ObjectId(id))
+    return MongoCli.User["group"].find(__filter__)
+
 def find_groups(domain,parents=[]):
     __filter__=dict(__domain__=domain)
     if len(parents)>0:

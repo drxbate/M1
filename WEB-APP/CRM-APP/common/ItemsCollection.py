@@ -13,6 +13,7 @@ class ItemsCollection(object):
         self.__cur__=cursor
         self.__count__ = self.__cur__.count()
         self.adapterClass = adapterClass
+        self.__filters__=[]
         
     def count(self):
         return self.__count__
@@ -35,8 +36,16 @@ class ItemsCollection(object):
         #yield self.__cur__.next()
         for i in self.__cur__:
             if self.adapterClass==None:
-                yield i
+                r = i
             else:
-                yield self.adapterClass(i)
-    
-        
+                r = self.adapterClass(i)
+            
+            ex = [1 for reference,comparater in self.__filters__ if not comparater(reference,r)]
+            if len(ex)==0:
+                yield r
+
+    def addFilter(self,reference,comparater):
+        '''
+        comparater=lambda reference,cur:reference==cur
+        '''
+        self.__filters__.append((reference,comparater,))

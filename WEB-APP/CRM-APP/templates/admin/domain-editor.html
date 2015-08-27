@@ -1,0 +1,65 @@
+{% extends "common/dialog.html" %}
+{% block contentBody %}
+<div>
+	<form id="form" class="form-horizontal" method="post" enctype="multipart/form-data" data-id="{{data.id}}">
+			<div class="form-group">
+			  	<label for="tvDomain" class="col-sm-3 control-label">域名</label>
+			  	<div class="col-sm-8">
+			    <input type="text" class="form-control form-valid" name="cellphone" id="tvDomain" placeholder="域名" value="{{data.domain}}">
+			    </div>
+			 </div>
+			 <div class="form-group">
+			  	<label for="tvParent" class="col-sm-3 control-label">上级域</label>
+			  	
+			  	<div class="col-sm-8">
+				    <input type="text" class="form-control DataField selector" 
+					id="tvParent" 
+					placeholder="选择域"					 
+					selector="domain"
+					selector-parameter="ex={{data.id}}"
+					value-of-control="#hidParent"
+					value="{{pName}}"
+					>
+					<input type="hidden" id="hidParent" class="DataField" value="{{pId}}"/>
+			    </div>
+			 </div>
+			 <div class="form-group">
+			 	<input id="btnSave" type="button" class="btn btn-primary" value="保存">
+			 	<input type="button" class="btn btn-default" value="返回" onclick="closeMe();">
+			 </div>
+		</form>
+</div>
+{% endblock %}
+{% block scripts %}
+<script type="text/javascript">
+	$(function(){
+		$("#form").bindSelector();
+		$("#btnSave").click(function(){
+			$.post("save",
+					{"domain":$("#tvDomain").val(),"parent":$("#hidParent").val()},
+					function(json){
+						if(json.state==0){
+							$("form").attr("data-id",json.result["id"]);
+							showMessage({
+								width:320,
+								height:240,			
+								"title":"保存成功",
+								"body":"是否继续新增?或直接返回",
+								"buttons":[{"id":"btnContinue","text":"继续添加"},{"id":"btnReturn","text":"直接返回"}],
+								"defaultButton":"btnReturn",
+								closed:function(state){
+									if(state=="btnReturn"){
+										closeMe();
+									}
+								}
+							});
+						}
+						else{
+							showMessage("保存失败，请重新再试～");
+						}
+					},
+					"json");
+		});
+	});
+</script>
+{% endblock %}

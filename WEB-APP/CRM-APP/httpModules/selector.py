@@ -5,7 +5,7 @@ Created on 2015年7月22日
 
 @author: ruixidong
 '''
-from flask import Blueprint,render_template,request
+from flask import Blueprint,render_template,request,redirect
 from ObjectModules import MetaData,Profile
 import json
 
@@ -53,5 +53,9 @@ def __add_mark__(cls):
 def __del_mark__(cls,id):
     Profile.Marks(cls).remove(id)
     return json.dumps(dict(state=0,id=id))
+
+@selector.route("/domain")
+def __domain__():
+    return redirect("/admin/domain-selector?ex=%s"%request.args.get("ex"))
     
 

@@ -3,7 +3,7 @@
 {% block contentBody %}
 <div style="margin-top:10px">
 	<div class="row">
-	<a href="?id=&ex={{ex}}">::根域::
+	<a href="?id=&ex={{ex}}">::根域::</a>
 	{% if current!=None %}
 	{% for d in current.fetchPath() -%}
 	<span class="fa fa-angle-double-right"></span>
@@ -71,7 +71,7 @@
 						 &nbsp;
 					</td>
 					<td>
-						{{i.groups}} &nbsp;
+						<a href="/admin/group?domain={{i.id}}">{{i.groups}}</a> &nbsp;
 					</td>
 					<td>
 						{{i.members}} &nbsp;

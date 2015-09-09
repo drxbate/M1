@@ -73,3 +73,50 @@ def __domain_editor__():
                 pId,pName = data.parent.id,data.parent.name
                 
         return render_template("admin/domain-editor.html",data=data,pId=pId,pName=pName)
+
+
+@admin.route("/group-selector",methods=["GET"])
+@admin.route("/group",methods=["GET"]) 
+def __group__():
+    '''
+    id 当前域id，获取当前域的子域，如果为空，则获取全部顶层域
+    exp 需要排除的，域id
+    '''
+    _domain=security.Context.CurrentSession.domain
+    domain,id= request.args.get("domain"),request.args.get("id")
+    _domain=domain if domain!=None and domain!="" else _domain
+    
+    if id!="" and id!=None:
+        data = security.GroupCollection.querySubGroup(_domain,parent=id)
+    else:
+        data = security.GroupCollection.querySubGroup(_domain)
+    
+    
+    #def _compare(ref,obj):
+    #    return obj.id != ref
+    
+    if request.path=="/admin/group-selector":
+        #data.addFilter(currentDomain.id,lambda ref,obj: ref.id != obj.id)
+        #data.addFilter(ex,_compare)
+        return render_template("admin/group-selector.html",domain=_domain, data=data)
+    else:
+        return render_template("admin/group.html", domain=_domain, data=data)
+    
+@admin.route("/group/editor")
+@admin.route("/group/save",methods=["POST"])
+def __group_editor__():
+    if request.path=="/admin/group/save":
+        domain,id,group,parents=request.form.get("domain"),request.form.get("id"),request.form.get("group"),request.form.get("parents")
+        if id==None:
+            id=security.GroupCollection.addGroup(domain, group, parents)
+            return json.dumps(dict(state=0,result=dict(id=str(id))))
+        else:
+            security.GroupCollection.saveGroup(domain=domain, id=id, group=group, parents=parents)
+            return json.dumps(dict(state=0,result=dict(id=str(id))))
+    else:
+        domain,id = request.args.get("domain"),request.args.get("id")
+        data=None
+        if id!=None:
+            data = security.GroupCollection.getGroup(domain,id)
+        domain = security.DomainCollection.getDomain(domain)
+        return render_template("admin/group-editor.html",data=data,domain=domain,id=id)

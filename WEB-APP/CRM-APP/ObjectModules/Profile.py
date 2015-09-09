@@ -27,7 +27,7 @@ class Mark:
         return m
     @classmethod
     def serialize(cls,mark):
-        return json.dumps(mark.__dict__())
+        return json.dumps(mark.__dict__)
     @classmethod
     def descerialize(cls,text):
         d=dict(__id__="",icon="",iconColor="",style="",text="",)

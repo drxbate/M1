@@ -13,6 +13,7 @@ encoding//ObjectModules/MetaData.py=utf-8
 encoding//ObjectModules/Profile.py=utf-8
 encoding//ObjectModules/security/Domain.py=utf-8
 encoding//ObjectModules/security/Group.py=utf-8
+encoding//ObjectModules/security/HttpContext.py=utf-8
 encoding//ObjectModules/security/Registion.py=utf-8
 encoding//ObjectModules/security/Role.py=utf-8
 encoding//ObjectModules/security/Session.py=utf-8

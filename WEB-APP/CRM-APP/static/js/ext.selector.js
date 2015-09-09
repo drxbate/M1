@@ -18,7 +18,8 @@ $.fn.extend({
 					var ig=$("<div class='input-group'></div>");
 					$(e).wrap(ig);
 					var container=$(e).parent();
-					container.append($("<div class='input-group-addon'><span class='fa fa-th-list' style='font-size:12pt'></span></div>"));
+					
+					container.append($("<div class='input-group-addon'><span class='fa fa-th-list' style='font-size:12pt;'></span></div>"));
 					
 					$(e).attr("data-init","1");
 					container.unbind("click");

@@ -84,8 +84,8 @@ def update_domain(name,parent,id=None,info={}):
     else:
         return MongoCli.User["domain"].update({"_id":ObjectId(id)},data,True,False)
 
-def find_group(id):
-    __filter__=dict(_id=ObjectId(id))
+def find_group(domain,id):
+    __filter__=dict(__domain__=domain,_id=ObjectId(id))
     return MongoCli.User["group"].find(__filter__)
 
 def find_groups(domain,parents=[]):
@@ -94,6 +94,12 @@ def find_groups(domain,parents=[]):
         __filter__["__parent__"]={"$in":parents}
     return MongoCli.User["group"].find(__filter__)
 
-def update_group(domain,groupname,parents=[]):
-    data=dict(__domain__=domain,name=groupname,__parents__=parents)
-    return MongoCli.User["group"].update({"name":groupname},data,True,False)
+def update_group(domain,id,newgroupname="",parents=None):
+    
+    data=dict(__domain__={"$set":domain},name={"$set":newgroupname},__parents__={"$set":parents})
+    if parents==None:
+        data.pop("__parents__")
+    if newgroupname!="":
+        data.update(dict(name=newgroupname))
+        
+    return MongoCli.User["group"].update({"_id":ObjectId(id)},data,True,False)

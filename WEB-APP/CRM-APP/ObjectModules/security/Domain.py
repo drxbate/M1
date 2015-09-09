@@ -7,6 +7,9 @@ Created on 2015年8月24日
 ''' 
 from base import SecurityObject,SecurityHandler,UserHandler
 from common import DataAdapter,ItemsCollection
+import sys
+
+from HttpContext import Context
 
 class Domain(SecurityObject):
     def __init__(self,id,domainName,parent=None):
@@ -63,11 +66,14 @@ class DomainCollection(ItemsCollection):
     @classmethod
     def querySubDomain(cls,parent=None,TopLevelOnly=False):
         if TopLevelOnly==True:
-            return DomainCollection(UserHandler.find_domain(parent=""))
+            if Context.CurrentSession.allow("system"):
+                return DomainCollection(UserHandler.find_domain(parent=""))
+            else:
+                return DomainCollection(UserHandler.find_domain(parent=Context.CurrentSession.domain))
         if parent!=None:
             return DomainCollection(UserHandler.find_domain(parent=parent))
-        else:
-            return DomainCollection(UserHandler.find_domain())
+#         else:
+#             return DomainCollection(UserHandler.find_domain())
     @classmethod
     def getDomain(cls,id):
         for i in DomainCollection(UserHandler.find_domain(id=id)):

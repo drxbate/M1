@@ -58,4 +58,7 @@ def __del_mark__(cls,id):
 def __domain__():
     return redirect("/admin/domain-selector?ex=%s"%request.args.get("ex"))
     
+@selector.route("/group")
+def __group__():
+    return redirect("/admin/group-selector?ex=%s"%request.args.get("ex"))
 

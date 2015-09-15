@@ -6,8 +6,9 @@ Created on 2015年8月24日
 @author: ruixidong
 ''' 
 from base import SecurityObject,SecurityHandler,UserHandler
-from common import DataAdapter,ItemsCollection
+from common import DataAdapter,ItemsCollection,utility
 import sys
+import Group,User
 
 from HttpContext import Context
 
@@ -34,13 +35,13 @@ class Domain(SecurityObject):
                     return i
     @property
     def members(self):
-        return UserHandler.getUsers(domain=self.domain).count()
+        return User.UserCollection.queryUsers(domain=self.id)
     @property
     def subdomains(self):
-        return UserHandler.find_domain(parent=self.id).count()
+        return DomainCollection.querySubDomain(parent=self.id)
     @property
     def groups(self):
-        return UserHandler.find_groups(domain=self.domain).count()
+        return Group.GroupCollection.querySubGroup(domain=self.id)
     def fetchPath(self):
         l = []
         p = self
@@ -76,6 +77,8 @@ class DomainCollection(ItemsCollection):
 #             return DomainCollection(UserHandler.find_domain())
     @classmethod
     def getDomain(cls,id):
+        if not utility.is_validId(id):
+            return None
         for i in DomainCollection(UserHandler.find_domain(id=id)):
             return i
     @classmethod

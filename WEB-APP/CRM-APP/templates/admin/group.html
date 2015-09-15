@@ -2,16 +2,7 @@
 
 {% block contentBody %}
 <div style="margin-top:10px">
-	<div class="row">
-	<a href="?id=&ex={{ex}}">::根域::</a>
-	{% if current!=None %}
-	{% for d in current.fetchPath() -%}
-	<span class="fa fa-angle-double-right"></span>
-	<a href="?id={{d.id}}&ex={{ex}}">{{ d.domain }}</a>
 	
-	{%- endfor %}
-	{% endif %}
-	</div>
 	<div id="filter" class="row">
 		<div col="col-xs-10">
 		<form class="form-horizontal" method="post" enctype="multipart/form-data">
@@ -26,9 +17,9 @@
 				</div>
 				<div class="col-sm-1">
 				{% if current!=None -%}
-				<a id="btnAdd" class="btn btn-default fa fa-plus" style="font-size:15pt" onclick="showDialog('domain/editor?parent={{current.id}}')"></a>
+				<a id="btnAdd" class="btn btn-default fa fa-plus" style="font-size:15pt" onclick="showDialog('group/editor?domain={{domain}}&parent={{group}}')"></a>
 				{% else %}
-				<a id="btnAdd" class="btn btn-default fa fa-plus" style="font-size:15pt" onclick="showDialog('domain/editor')"></a>
+				<a id="btnAdd" class="btn btn-default fa fa-plus" style="font-size:15pt" onclick="showDialog('group/editor?domain={{domain}}')"></a>
 				{%- endif %}
 				</div>
 			</div>
@@ -41,16 +32,16 @@
 			<thead>
 				<tr>
 					<th class="col-xs-2">
-						域名
+						组
 					</th>
 					<th class="col-xs-3">
-						所属域
+						所在域
+					</th>
+					<th class="col-xs-3">
+						上级组
 					</th>
 					<th class="col-xs-1">
-						子域
-					</th>
-					<th class="col-xs-1">
-						群组
+						子级组
 					</th>
 					<th class="col-xs-1">
 						成员
@@ -61,17 +52,17 @@
 			{%for i in data -%}
 				<tr>
 					<td>
-						<a href="#" onclick="showDialog('domain/editor?id={{i.id}}');">{{i.domain}}</a> &nbsp;
+						<a href="#" onclick="showDialog('group/editor?id={{i.id}}');">{{i.group}}</a> &nbsp;
 					</td>
 					<td>
-						{{i.parent.domain}} &nbsp;
+						<a href="#" onclick="showDialog('group/editor?id={{i.id}}');">{{i.domain.domain}}</a> &nbsp;
 					</td>
 					<td>
-						<a href="?id={{i.id}}&ex={{ex}}">{{i.subdomains.count}}</a>
+						{{i.parents}} &nbsp;
+					</td>
+					<td>
+						<a href="?domain={{domain}}&&id={{i.id}}&ex={{ex}}">{{i.subgroups.count}}</a>
 						 &nbsp;
-					</td>
-					<td>
-						<a href="/admin/group?domain={{i.id}}">{{i.groups.count}}</a> &nbsp;
 					</td>
 					<td>
 						{{i.members.count}} &nbsp;

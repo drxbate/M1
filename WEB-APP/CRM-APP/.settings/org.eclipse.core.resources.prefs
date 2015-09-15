@@ -26,6 +26,7 @@ encoding//common/ItemsCollection.py=utf-8
 encoding//common/cacheManager.py=utf-8
 encoding//common/daemon.py=utf-8
 encoding//common/log.py=utf-8
+encoding//common/setting.py=utf-8
 encoding//common/sms.py=utf-8
 encoding//common/utility.py=utf-8
 encoding//htmlPlugins/leftNav.py=utf-8

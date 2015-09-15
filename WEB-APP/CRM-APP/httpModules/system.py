@@ -6,7 +6,7 @@ Created on 2015年7月22日
 @author: ruixidong
 '''
 from flask import Blueprint,render_template,request
-from common import cacheManager
+from common import cacheManager,utility
 from ObjectModules import security
 import json
 
@@ -84,7 +84,7 @@ def __group__():
     '''
     _domain=security.Context.CurrentSession.domain
     domain,id= request.args.get("domain"),request.args.get("id")
-    _domain=domain if domain!=None and domain!="" else _domain
+    _domain="%s"%(domain if domain!=None and domain!="" else _domain,)
     
     if id!="" and id!=None:
         data = security.GroupCollection.querySubGroup(_domain,parent=id)
@@ -107,7 +107,9 @@ def __group__():
 def __group_editor__():
     if request.path=="/admin/group/save":
         domain,id,group,parents=request.form.get("domain"),request.form.get("id"),request.form.get("group"),request.form.get("parents")
-        if id==None:
+        if id==None or id=="":
+            parents=("%s"%parents).split(" ")
+            
             id=security.GroupCollection.addGroup(domain, group, parents)
             return json.dumps(dict(state=0,result=dict(id=str(id))))
         else:
@@ -118,5 +120,7 @@ def __group_editor__():
         data=None
         if id!=None:
             data = security.GroupCollection.getGroup(domain,id)
-        domain = security.DomainCollection.getDomain(domain)
+        
+        domain = None if not utility.is_validId(domain) else security.DomainCollection.getDomain(domain)
         return render_template("admin/group-editor.html",data=data,domain=domain,id=id)
+    

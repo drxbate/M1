@@ -14,7 +14,7 @@ class ItemsCollection(object):
         self.__count__ = self.__cur__.count()
         self.adapterClass = adapterClass
         self.__filters__=[]
-        
+    @property
     def count(self):
         return self.__count__
 

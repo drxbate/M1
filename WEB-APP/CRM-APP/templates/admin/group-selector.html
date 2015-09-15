@@ -2,16 +2,6 @@
 
 {% block contentBody %}
 <div>
-	<div class="row">
-	<a href="?id=&ex={{ex}}">::根域::</a>
-	{% if current!=None %}
-	{% for d in current.fetchPath() -%}
-	<span class="fa fa-angle-double-right"></span>
-	<a href="?id={{d.id}}&ex={{ex}}">{{ d.domain }}</a>
-	
-	{%- endfor %}
-	{% endif %}
-	</div>
 	<div id="filter" class="row">
 	
 		<form class="form-horizontal" method="post" enctype="multipart/form-data">
@@ -32,14 +22,15 @@
 			<thead>
 				<tr>
 					<th class="col-xs-3">
-						域名
+						组名
 					</th>
 					<th class="col-xs-3">
-						所属域
+						上级组
 					</th>
 					<th class="col-xs-1">
-						子域
+						子级组
 					</th>
+					
 				</tr>
 			</thead>
 			<tbody>
@@ -47,15 +38,17 @@
 				{% if current!=i%}
 				<tr>
 					<td>
-						<a href="#" class="btn" data-role="close" return-type='json' return-value='{"dispName":"{{i.domain}}","value":"{{i.id}}"}'>
-						{{i.domain}}
+						<a href="#" class="btn group-item" data-id="{{i.id}}" data-name="{{i.name}}">
+						{{i.name}}
 						</a>&nbsp;
 					</td>
 					<td>
-						{{i.parent.domain}}&nbsp;
+						{% for g in i.parents%}
+						<a href="?domain={{domain}}&id={{g.id}}&ex={{ex}}">{{g.name}}</a>;&nbsp;
+						{% endfor %}
 					</td>
 					<td>
-						<a href="?id={{i.id}}&ex={{ex}}">{{i.subdomains.count}}</a>&nbsp;
+						<a href="?domain={{domain}}&id={{i.id}}&ex={{ex}}">{{i.subgroups.count}}</a>&nbsp;
 					</td>
 					
 				</tr>
@@ -69,7 +62,7 @@
 						{{i.parent.domain}}&nbsp;
 					</td>
 					<td>
-						{{i.subdomains.count}}&nbsp;
+						{{i.subdomains}}&nbsp;
 					</td>
 					
 				</tr>
@@ -78,16 +71,35 @@
 			</tbody>
 		</table>
 	</div>
+	<div id="rowSelected">
+		
+	</div>
 </div>
 {% endblock %}
 {% block scripts %}
 <script type="text/javascript">
-	$(function(){
-		$("#btnAdd").click(function(){
-			showDialog("domain/editor");
-			
-		});
-		
+$(function(){
+	$("#data .group-item").click(function(){
+		var dataId=$(this).attr("data-id");
+		var dataName=$(this).attr("data-Name");
+		$.fetch_selected(this);
+	});
+});
+jQuery.extend({
+	fetch_selected:function(e){
+		var dataId=e.dataId?e.dataId:$(e).attr("data-id");
+		var dataName=e.dataName?e.dataName:$(e).attr("data-name");
+		if($("#rowSelected>div[data-id="+dataId+"]").length>0){
+			return;
+		}
+		var e = $("#rowSelected").append("<div>");
+		e.attr("dataId",dataId).attr("data-name",dataName).append("<span>").text(dataName);
+		var re = e.append("<a class='fa fa-remove'>");
+		re.click(function(){
+			e.remove();
+		}).hide();
+		e.hover(function(){re.fadeIn("slow")},function(){re.fadeOut("slow")});
+	}
 	});
 </script>
 {% endblock %}

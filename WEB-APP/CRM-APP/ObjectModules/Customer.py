@@ -60,7 +60,7 @@ class MyCustomer(Customer):
         exp="query_%s"%key
         func=getattr(self, exp)
         cur = func()
-        return cur.count()
+        return cur.count
     def query_fav(self):
         return self.query(filter={"__fav__":1})
     def query_l10(self):

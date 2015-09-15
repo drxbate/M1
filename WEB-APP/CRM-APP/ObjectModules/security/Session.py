@@ -44,7 +44,10 @@ class Session(object):
         return str(self.user.groups)
     @property
     def domain(self):
-        return str(self.user.domain)
+        if self.user.domain==None:
+            return ""
+        else:
+            return str(self.user.domain)
     
     def allow(self,right):
         return self.user.allow(right)

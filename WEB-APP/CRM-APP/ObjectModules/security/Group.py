@@ -6,18 +6,24 @@ Created on 2015年8月24日
 @author: ruixidong
 '''
 from ObjectModules.security.base import SecurityObject,UserHandler
-from common import DataAdapter,ItemsCollection
+import Domain,User
+
+from common import DataAdapter,ItemsCollection,utility
 
 class Group(SecurityObject):
-    def __init__(self,groupname,parents=[]):
+    def __init__(self,domain,id,groupname,parents=[]):
         SecurityObject.__init__(self)
+        self.__domain__=domain
+        self.__id__=id
         self.name=groupname
         self.__parents__=parents
     @property
     def parents(self):
         __group__=""
         def __get_group__(_id):
-            e = UserHandler.find_group(id=_id)
+            if not utility.is_validId(_id):
+                return False
+            e = UserHandler.find_group(domain=self.__domain__,id=_id)
             if e==None:
                 return False
             else:
@@ -25,9 +31,26 @@ class Group(SecurityObject):
                 return True
         ps = [__group__ for _id in self.__parents__ if __get_group__(_id)]
         return ",".join(ps)
-
+    @property
+    def domain(self):
+        return Domain.DomainCollection.getDomain(self.__domain__)
+    @property
+    def group(self):
+        return self.name
+    @property
+    def subgroups(self):
+        return GroupCollection.querySubGroup(self.__domain__, self.__id__)
+    @property
+    def members(self):
+        return User.UserCollection.queryUsers(domain=self.__domain__, groups=[self.__id__])
+    
 class GroupAdapter(DataAdapter):
-    pass
+    @property
+    def Group(self):
+        return Group(self.__domain__,self._id,self.name,self.__parents__)
+    @property
+    def id(self):
+        return str(self._id)
 
 class GroupCollection(ItemsCollection):
     @classmethod
@@ -42,7 +65,7 @@ class GroupCollection(ItemsCollection):
             return i
     @classmethod
     def addGroup(cls,domain,group,parents=[]):
-        objid=UserHandler.update_group(domain=domain,newgroupname=group, parents=parents)
+        objid=UserHandler.add_group(domain=domain,groupname=group, parents=parents)
         return objid
     @classmethod
     def saveGroup(cls,domain,newgroup="",parents=[]):
@@ -50,4 +73,6 @@ class GroupCollection(ItemsCollection):
         return objid        
     def __init__(self,cursor):
         ItemsCollection.__init__(self, cursor, GroupAdapter)
-    pass
+    def __iter__(self):
+        for i in ItemsCollection.__iter__(self):
+            yield i.Group

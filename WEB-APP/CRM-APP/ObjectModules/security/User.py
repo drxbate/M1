@@ -6,6 +6,8 @@ Created on 2015年8月24日
 @author: ruixidong
 '''
 from base import SecurityObject,RegistionHandler,UserHandler
+from common import ItemsCollection,DataAdapter
+import Domain,Group
 
 class User(SecurityObject):
     @classmethod
@@ -66,3 +68,31 @@ class User(SecurityObject):
         parents.extend(self.groups)
         parents.append(self.domain)
         return parents
+class UserAdapter(DataAdapter):
+    @property
+    def User(self):
+        return User(self.username,self)
+    @property
+    def id(self):
+        return str(self._id)
+class UserCollection(ItemsCollection):
+    @classmethod
+    def queryUsers(cls,domain,groups=[]):
+        return UserCollection(UserHandler.getUsers(domain=domain, groups=groups))
+    @classmethod
+    def getUser(cls,domain,id):
+        for i in UserCollection(UserHandler.getUsers(domain, id=id)):
+            return i
+    @classmethod
+    def addDomain(cls,domain,parent):
+        objid=UserHandler.update_domain(name=domain, parent=parent)
+        return objid
+    @classmethod
+    def saveDomain(cls,id,domain,parent):
+        objid=UserHandler.update_domain(id=id,name=domain, parent=parent)
+        return objid
+    def __init__(self,cursor):
+        ItemsCollection.__init__(self, cursor, UserAdapter)
+    def __iter__(self):
+        for i in ItemsCollection.__iter__(self):
+            yield i.User

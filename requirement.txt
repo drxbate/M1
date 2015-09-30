@@ -1,4 +1,4 @@
-flask-boostrap
+flask-bootstrap
 python-redis
 pymongo
 flask-cache

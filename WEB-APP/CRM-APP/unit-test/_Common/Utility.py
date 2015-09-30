@@ -14,6 +14,7 @@ class Test(unittest.TestCase):
     def testGenerateCode(self):
         code = utility.generateCode(6)
         self.assertTrue(True, code)
+        
 
 
 if __name__ == "__main__":

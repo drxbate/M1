@@ -3,9 +3,10 @@ function showDialog(url,options){
 	var _options={
 			width:800,
 			height:600,			
-			load:function(){},
+			load:function(win){},
 			closed:function(state){
-			}
+			},
+			result:null
 	};
 	$.extend(_options,options);
 	var html = '<div class="modal fade" id="__dialog__" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">'

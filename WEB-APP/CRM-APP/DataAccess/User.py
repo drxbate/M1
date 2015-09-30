@@ -126,7 +126,7 @@ def add_group(domain,groupname="",parents=None):
 def update_group(domain,id=None,newgroupname="",parents=None):
     if domain=="" or domain==None:
         domain = Settings.accounts.root_domain_id
-    data=dict(__domain__={"$set":domain},name={"$set":newgroupname},__parents__={"$set":parents})
+    data=dict(__domain__=domain,name=newgroupname,__parents__=parents)
     if parents==None:
         data.pop("__parents__")
     if newgroupname!="":
@@ -134,4 +134,4 @@ def update_group(domain,id=None,newgroupname="",parents=None):
     if id==None:
         return MongoCli.User["groups"].save(data)
     else:
-        return MongoCli.User["groups"].update({"_id":ObjectId(id)},data,True,False)
+        return MongoCli.User["groups"].update({"_id":ObjectId(id)},{"$set":data},True,False)

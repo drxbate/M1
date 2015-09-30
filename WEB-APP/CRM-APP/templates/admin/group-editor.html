@@ -11,7 +11,7 @@
 			<div class="form-group">
 			  	<label for="tvDomain" class="col-sm-3 control-label">组名</label>
 			  	<div class="col-sm-8">
-			    <input type="text" class="form-control form-valid" name="group" id="tvGroup" placeholder="组名" value="{{group}}"/>
+			    <input type="text" class="form-control form-valid" name="group" id="tvGroup" placeholder="组名" value="{{data.group}}"/>
 			    </div>
 			 </div>
 			 <div class="form-group">
@@ -25,9 +25,10 @@
 					selector-parameter="ex={{data.id}}"
 					value-of-control="#hidParents"
 					value="{%for i in data.parents -%}i.name {% endfor -%}"
+					load="onGroupSelectedLoad"
 					>
 					</textarea>
-					<input type="hidden" id="hidParents" class="DataField" value=" {%for i in data.parents -%}i.id{% endfor -%}"/>
+					<input type="hidden" id="hidParents" class="DataField" value=" {%for i in data.parents -%}i.id {% endfor -%}"/>
 			    </div>
 			 </div>
 			 <div class="form-group">
@@ -43,7 +44,7 @@
 		$("#form").bindSelector();
 		$("#btnSave").click(function(){
 			$.post("save",
-					{"id":"{{data.id}}","domain":"{{domain.id}}","group":$("#tvGroup").val(),"parents":$("#hidParents").val()},
+					{"id":"{{data.id}}","domain":"{{domain.id}}","group":$("#tvGroup").val(),"parents":$("#hidParents").val().trim()},
 					function(json){
 						if(json.state==0){
 							$("form").attr("data-id",json.result["id"]);
@@ -68,5 +69,15 @@
 					"json");
 		});
 	});
+	function onGroupSelectedLoad(win){
+		var tv=$("#tvParents").val().trim();
+		var hv=$("#hidParents").val().trim();
+		if(tv=="")return;
+		var disp=tv.split(" ");
+		var vals=hv.split(" ");
+		for(var i=0;i<disp.length;i++){
+			win.$.fetch_selected({"dataName":disp[i],"dataId":vals[i]});
+		}
+	}
 </script>
 {% endblock %}

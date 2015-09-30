@@ -27,14 +27,20 @@ $.fn.extend({
 						var control=$(this).find(".selector");
 						var selector = $(e).attr("selector");
 						var parameter = $(e).attr("selector-parameter");
+						var entLoaded=eval($(e).attr("load"));
 						showDialog("/selector/"+selector+"?"+parameter,{
 								width:600,
 								height:400,
 								closed:function(value){
-									$(control).val(value.dispName);
-									var val = $(control).attr("value-of-control");
-									if(val){$(val).val(value.value);}else{$(control).val(value.value);}
+									if(value){
+										$(control).val(value.dispName);
+										var val = $(control).attr("value-of-control");
+										if(val){$(val).val(value.value);}else{$(control).val(value.value);}
+									}
 									
+								},
+								load:function(win){
+									entLoaded(win);
 								}
 							});
 					});

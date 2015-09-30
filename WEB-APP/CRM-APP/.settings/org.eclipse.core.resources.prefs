@@ -46,6 +46,7 @@ encoding//setup/accounts.py=utf-8
 encoding//setup/data_city.py=utf-8
 encoding//setup/systags.py=utf-8
 encoding//unit-test/_Common/Utility.py=utf-8
+encoding//unit-test/_Common/test.py=utf-8
 encoding//unit-test/_DataAccess/Customer.py=utf-8
 encoding//unit-test/_DataAccess/User.py=utf-8
 encoding//unit-test/_ObjectModule/MetaData.py=utf-8

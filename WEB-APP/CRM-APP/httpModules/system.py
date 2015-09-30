@@ -107,13 +107,14 @@ def __group__():
 def __group_editor__():
     if request.path=="/admin/group/save":
         domain,id,group,parents=request.form.get("domain"),request.form.get("id"),request.form.get("group"),request.form.get("parents")
-        if id==None or id=="":
+        if parents!=None and parents!="":
             parents=("%s"%parents).split(" ")
+        if id==None or id=="":
             
             id=security.GroupCollection.addGroup(domain, group, parents)
             return json.dumps(dict(state=0,result=dict(id=str(id))))
         else:
-            security.GroupCollection.saveGroup(domain=domain, id=id, group=group, parents=parents)
+            security.GroupCollection.saveGroup(domain=domain, id=id, newgroup=group, parents=parents)
             return json.dumps(dict(state=0,result=dict(id=str(id))))
     else:
         domain,id = request.args.get("domain"),request.args.get("id")
@@ -123,4 +124,26 @@ def __group_editor__():
         
         domain = None if not utility.is_validId(domain) else security.DomainCollection.getDomain(domain)
         return render_template("admin/group-editor.html",data=data,domain=domain,id=id)
+
+@admin.route("/accounts-selector",methods=["GET"])
+@admin.route("/accounts",methods=["GET"]) 
+def __account__():
+    '''
+    id 当前域id，获取当前域的子域，如果为空，则获取全部顶层域
+    exp 需要排除的，域id
+    '''
+    _domain=security.Context.CurrentSession.domain
+    domain,group= request.args.get("domain"),request.args.get("group")
+    _domain="%s"%(domain if domain!=None and domain!="" else _domain,)
     
+    
+    data = security.UserCollection.queryUsers(domain=_domain, groups=([] if group!=None else [group]))
+    #def _compare(ref,obj):
+    #    return obj.id != ref
+    
+    if request.path=="/admin/account-selector":
+        #data.addFilter(currentDomain.id,lambda ref,obj: ref.id != obj.id)
+        #data.addFilter(ex,_compare)
+        return render_template("admin/account-selector.html",domain=_domain, data=data)
+    else:
+        return render_template("admin/account.html", domain=_domain, data=data)

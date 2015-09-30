@@ -1,5 +1,11 @@
 {% extends "common/dialog.html" %}
 
+{% block headExt %}
+<div class="pull-right" style="padding-top:7px;padding-right:5px">
+<button id="btnOk" class="btn btn-default">确认</button>
+<button id="btnCancel" class="btn btn-default">取消</button>
+</div>
+{% endblock %}
 {% block contentBody %}
 <div>
 	<div id="filter" class="row">
@@ -18,7 +24,7 @@
 		</form>
 	</div>
 	<div id="data" class="row">
-		<table>
+		<table class="table table-condensed">
 			<thead>
 				<tr>
 					<th class="col-xs-3">
@@ -71,10 +77,13 @@
 			</tbody>
 		</table>
 	</div>
-	<div id="rowSelected">
-		
-	</div>
+	
+	
 </div>
+<div style="display:block;background-color:#ccc;height:1px" class="row"></div>
+	<div>已选中组</div>
+	<div id="rowSelected" >	
+	</div>
 {% endblock %}
 {% block scripts %}
 <script type="text/javascript">
@@ -84,17 +93,30 @@ $(function(){
 		var dataName=$(this).attr("data-Name");
 		$.fetch_selected(this);
 	});
+	$("#btnOk").click(function(){
+		var dispName=[];
+		var value=[];
+		$.each($("#rowSelected>div"),function(i,o){
+			dispName.push($(o).attr("data-name"));
+			value.push($(o).attr("data-id"));
+		});
+		closeMe({"dispName":dispName.join(" "),"value":value.join(" ")});
+	});
+	$("#btnCancel").click(function(){
+		closeMe();
+	});
 });
 jQuery.extend({
 	fetch_selected:function(e){
 		var dataId=e.dataId?e.dataId:$(e).attr("data-id");
 		var dataName=e.dataName?e.dataName:$(e).attr("data-name");
 		if($("#rowSelected>div[data-id="+dataId+"]").length>0){
-			return;
+			//return;
 		}
-		var e = $("#rowSelected").append("<div>");
-		e.attr("dataId",dataId).attr("data-name",dataName).append("<span>").text(dataName);
-		var re = e.append("<a class='fa fa-remove'>");
+		var e = $("<div class='col-xs-2'></div>").attr("data-id",dataId).attr("data-name",dataName).appendTo("#rowSelected");
+		$("<span>").text(dataName).appendTo(e);
+		//e.attr("dataId",dataId).attr("data-name",dataName).append("<span>"++"</span>").text(dataName);
+		var re = $("<a class='fa fa-remove btn'>").appendTo(e);
 		re.click(function(){
 			e.remove();
 		}).hide();

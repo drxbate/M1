@@ -18,18 +18,21 @@ class Group(SecurityObject):
         self.name=groupname
         self.__parents__=parents
     @property
+    def id(self):
+        return self.__id__
+    @property
     def parents(self):
-        __group__=""
         def __get_group__(_id):
             if not utility.is_validId(_id):
-                return False
-            e = UserHandler.find_group(domain=self.__domain__,id=_id)
+                return ""
+            e = GroupCollection.getGroup(domain=self.__domain__,id=_id)
             if e==None:
-                return False
+                return ""
             else:
-                __group__=e["name"]
-                return True
-        ps = [__group__ for _id in self.__parents__ if __get_group__(_id)]
+                return e.name
+                
+        ps = [__get_group__(_id) for _id in self.__parents__]
+        ps = [v for v in ps if v!=""]
         return ",".join(ps)
     @property
     def domain(self):
@@ -60,7 +63,7 @@ class GroupCollection(ItemsCollection):
         else:
             return GroupCollection(UserHandler.find_groups(domain,parents=[]))
     @classmethod
-    def getGroup(self,domain,id):
+    def getGroup(cls,domain,id):
         for i in GroupCollection(UserHandler.find_group(domain=domain,id=id)):
             return i
     @classmethod
@@ -68,8 +71,8 @@ class GroupCollection(ItemsCollection):
         objid=UserHandler.add_group(domain=domain,groupname=group, parents=parents)
         return objid
     @classmethod
-    def saveGroup(cls,domain,newgroup="",parents=[]):
-        objid=UserHandler.update_group(id=id,domain=domain,newgroupname=newgroup, parent=parents)
+    def saveGroup(cls,domain,id,newgroup="",parents=[]):
+        objid=UserHandler.update_group(id=id,domain=domain,newgroupname=newgroup, parents=parents)
         return objid        
     def __init__(self,cursor):
         ItemsCollection.__init__(self, cursor, GroupAdapter)

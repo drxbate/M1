@@ -83,14 +83,6 @@ class UserCollection(ItemsCollection):
     def getUser(cls,domain,id):
         for i in UserCollection(UserHandler.getUsers(domain, id=id)):
             return i
-    @classmethod
-    def addDomain(cls,domain,parent):
-        objid=UserHandler.update_domain(name=domain, parent=parent)
-        return objid
-    @classmethod
-    def saveDomain(cls,id,domain,parent):
-        objid=UserHandler.update_domain(id=id,name=domain, parent=parent)
-        return objid
     def __init__(self,cursor):
         ItemsCollection.__init__(self, cursor, UserAdapter)
     def __iter__(self):
